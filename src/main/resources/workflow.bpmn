@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="scrum-workflow" name="Scrum Workflow" isExecutable="true">
+    <bpmn:startEvent id="startFlow" name="Product Order Received">
+      <bpmn:outgoing>SequenceFlow_05l6yq7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="SequenceFlow_05l6yq7" sourceRef="startFlow" targetRef="checkProductTimeFrame" />
+    <bpmn:exclusiveGateway id="newSprintLabel" name="More Time?">
+      <bpmn:incoming>SequenceFlow_05chjrb</bpmn:incoming>
+      <bpmn:outgoing>newSprintLabelTrue</bpmn:outgoing>
+      <bpmn:outgoing>newSprintLabelFalse</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_05chjrb" sourceRef="checkProductTimeFrame" targetRef="newSprintLabel" />
+    <bpmn:sequenceFlow id="newSprintLabelTrue" name="YES" sourceRef="newSprintLabel" targetRef="groomingSession">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${continue}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="endFlow" name="Product Lifecycle Finished">
+      <bpmn:incoming>newSprintLabelFalse</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="newSprintLabelFalse" name="NO" sourceRef="newSprintLabel" targetRef="endFlow">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!continue}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1bgxtva" sourceRef="implementationStage" targetRef="implementationInProgressLabel" />
+    <bpmn:sequenceFlow id="SequenceFlow_0vsfe7a" sourceRef="groomingSession" targetRef="planningSession" />
+    <bpmn:serviceTask id="checkProductTimeFrame" name="Check Requirements to Start Sprint" camunda:class="main.events.CheckProductTimeframe">
+      <bpmn:incoming>SequenceFlow_05l6yq7</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0fm6tik</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_05chjrb</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="groomingSession" name="Grooming Session" camunda:class="main.events.GroomingSession">
+      <bpmn:incoming>newSprintLabelTrue</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0vsfe7a</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="implementationStage" name="Implementation" camunda:class="main.events.ImplementationStage">
+      <bpmn:incoming>implementationInProgressLabelTrue_label</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1ccv2lm</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1bgxtva</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0fm6tik" sourceRef="retrospectiveMeeging" targetRef="checkProductTimeFrame" />
+    <bpmn:serviceTask id="retrospectiveMeeging" name="Retrospective Meeting" camunda:class="main.events.RetrospectiveMeeting">
+      <bpmn:incoming>SequenceFlow_1ng6rve</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0fm6tik</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="implementationInProgressLabel" name="More Days for Implementation?">
+      <bpmn:incoming>SequenceFlow_1bgxtva</bpmn:incoming>
+      <bpmn:outgoing>implementationInProgressLabelFalse_label</bpmn:outgoing>
+      <bpmn:outgoing>implementationInProgressLabelTrue_label</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="implementationInProgressLabelFalse_label" name="NO" sourceRef="implementationInProgressLabel" targetRef="reviewMeeting">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!implement}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="implementationInProgressLabelTrue_label" name="YES" sourceRef="implementationInProgressLabel" targetRef="implementationStage">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${implement}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_1ccv2lm" sourceRef="planningSession" targetRef="implementationStage" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ng6rve" sourceRef="reviewMeeting" targetRef="retrospectiveMeeging" />
+    <bpmn:serviceTask id="planningSession" name="Planning Session" camunda:class="main.events.PlanningSession">
+      <bpmn:incoming>SequenceFlow_0vsfe7a</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ccv2lm</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="reviewMeeting" name="Review Meeting" camunda:class="main.events.ReviewMeeting">
+      <bpmn:incoming>implementationInProgressLabelFalse_label</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1ng6rve</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="scrum-workflow">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="startFlow">
+        <dc:Bounds x="171" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="144" y="138" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_05l6yq7_di" bpmnElement="SequenceFlow_05l6yq7">
+        <di:waypoint xsi:type="dc:Point" x="207" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="249" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="204" y="110" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ExclusiveGateway_1d876f5_di" bpmnElement="newSprintLabel" isMarkerVisible="true">
+        <dc:Bounds x="376" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="356" y="75" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_05chjrb_di" bpmnElement="SequenceFlow_05chjrb">
+        <di:waypoint xsi:type="dc:Point" x="349" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="376" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="366" y="110" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0wi7v0c_di" bpmnElement="newSprintLabelTrue">
+        <di:waypoint xsi:type="dc:Point" x="401" y="145" />
+        <di:waypoint xsi:type="dc:Point" x="401" y="186" />
+        <di:waypoint xsi:type="dc:Point" x="401" y="186" />
+        <di:waypoint xsi:type="dc:Point" x="401" y="226" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="424" y="144" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EndEvent_1i78pme_di" bpmnElement="endFlow">
+        <dc:Bounds x="546" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="519" y="138" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ys2lni_di" bpmnElement="newSprintLabelFalse">
+        <di:waypoint xsi:type="dc:Point" x="426" y="120" />
+        <di:waypoint xsi:type="dc:Point" x="546" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="445" y="105" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1bgxtva_di" bpmnElement="SequenceFlow_1bgxtva">
+        <di:waypoint xsi:type="dc:Point" x="777" y="266" />
+        <di:waypoint xsi:type="dc:Point" x="809" y="266" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="687.5" y="256" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0vsfe7a_di" bpmnElement="SequenceFlow_0vsfe7a">
+        <di:waypoint xsi:type="dc:Point" x="451" y="266" />
+        <di:waypoint xsi:type="dc:Point" x="514" y="266" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="494.5" y="256" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1durnpd_di" bpmnElement="checkProductTimeFrame">
+        <dc:Bounds x="249" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1oddfnt_di" bpmnElement="groomingSession">
+        <dc:Bounds x="351" y="226" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0ox6lvm_di" bpmnElement="implementationStage">
+        <dc:Bounds x="677" y="226" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0fm6tik_di" bpmnElement="SequenceFlow_0fm6tik">
+        <di:waypoint xsi:type="dc:Point" x="1174" y="306" />
+        <di:waypoint xsi:type="dc:Point" x="1174" y="464" />
+        <di:waypoint xsi:type="dc:Point" x="299" y="464" />
+        <di:waypoint xsi:type="dc:Point" x="299" y="161" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="571" y="183" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_04hj0cw_di" bpmnElement="retrospectiveMeeging">
+        <dc:Bounds x="1124" y="226" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ExclusiveGateway_07gm5fi_di" bpmnElement="implementationInProgressLabel" isMarkerVisible="true">
+        <dc:Bounds x="809" y="241" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="789" y="210" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0dg0cy4_di" bpmnElement="implementationInProgressLabelFalse_label">
+        <di:waypoint xsi:type="dc:Point" x="859" y="266" />
+        <di:waypoint xsi:type="dc:Point" x="946" y="266" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="829" y="246" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1n4hx8u_di" bpmnElement="implementationInProgressLabelTrue_label">
+        <di:waypoint xsi:type="dc:Point" x="834" y="291" />
+        <di:waypoint xsi:type="dc:Point" x="834" y="373" />
+        <di:waypoint xsi:type="dc:Point" x="727" y="373" />
+        <di:waypoint xsi:type="dc:Point" x="727" y="306" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="820" y="291" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ccv2lm_di" bpmnElement="SequenceFlow_1ccv2lm">
+        <di:waypoint xsi:type="dc:Point" x="614" y="266" />
+        <di:waypoint xsi:type="dc:Point" x="677" y="266" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="642" y="282" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1ng6rve_di" bpmnElement="SequenceFlow_1ng6rve">
+        <di:waypoint xsi:type="dc:Point" x="1046" y="266" />
+        <di:waypoint xsi:type="dc:Point" x="1124" y="266" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="986" y="288" width="90" height="20" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_05fkxsr_di" bpmnElement="planningSession">
+        <dc:Bounds x="514" y="226" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_1au0uhc_di" bpmnElement="reviewMeeting">
+        <dc:Bounds x="946" y="226" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
