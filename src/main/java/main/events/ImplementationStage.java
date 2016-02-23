@@ -1,24 +1,36 @@
 package main.events;
 
-import java.util.logging.Logger;
-
 import main.Constants;
+import main.gui.GUI;
+import main.gui.Helper;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 public class ImplementationStage implements JavaDelegate {
-	private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
+	// private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
 
 	public void execute(DelegateExecution execution) throws Exception {
-		LOGGER.info("FOURTH STEP: " + Constants.counter);
-		Thread.sleep(1000);
-		Constants.counter += 1;
-		if (Constants.counter > 1) {
-			LOGGER.info("==================================HERE");
+		System.out.println("Event entered: Implementation");
+		GUI gui = Helper.getGUI();
+		gui.refreshBackground();
+		gui.drawToBackground(577, 250);
+
+		Thread.sleep(1500);
+
+		System.out.println("XOR check: More Days for Implementation?");
+		gui = Helper.getGUI();
+		gui.refreshBackground();
+		gui.drawToBackground(682, 237);
+
+		Thread.sleep(1500);
+
+		Constants.TIME += 1;
+		if (Constants.TIME > 1) {
+			System.out.println("XOR result: NO");
 			execution.getProcessInstance().setVariable("implement", false);
 		} else {
-			LOGGER.info("==================================THERE");
+			System.out.println("XOR result: YES");
 			execution.getProcessInstance().setVariable("implement", true);
 		}
 

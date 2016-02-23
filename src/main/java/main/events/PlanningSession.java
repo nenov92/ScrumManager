@@ -1,17 +1,20 @@
 package main.events;
 
-import java.util.logging.Logger;
-
-import main.Constants;
+import main.gui.GUI;
+import main.gui.Helper;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 public class PlanningSession implements JavaDelegate {
-	private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
+	// private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
 
 	public void execute(DelegateExecution execution) throws Exception {
-		LOGGER.info("THIRD STEP");
-		Thread.sleep(1000);
+		System.out.println("Event entered: Planning Session");
+		GUI gui = Helper.getGUI();
+		gui.refreshBackground();
+		gui.drawToBackground(415, 250);
+
+		Thread.sleep(1500);
 	}
 }

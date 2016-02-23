@@ -2,8 +2,12 @@ package main;
 
 import static org.camunda.bpm.engine.variable.Variables.createVariables;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.logging.Logger;
+
+import main.gui.Console;
+import main.gui.GUI;
+import main.gui.Helper;
 
 import org.camunda.bpm.application.PostDeploy;
 import org.camunda.bpm.application.ProcessApplication;
@@ -13,7 +17,6 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.authorization.Groups;
 import org.camunda.bpm.engine.identity.Group;
 import org.camunda.bpm.engine.identity.User;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
 
 @ProcessApplication("Scrum Workflow App")
 public class ScrumWorkflowApplication extends ServletProcessApplication {
@@ -21,22 +24,33 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 	private final Logger LOGGER = Logger.getLogger(ScrumWorkflowApplication.class.getName());
 
 	@PostDeploy
-	public void startProcess(ProcessEngine engine) {
-		LOGGER.info("Process Engine Started");
+	public void startProcess(ProcessEngine engine) throws IOException, InterruptedException {
+		new Console();
 
-		//createUsers(engine);
+		System.out.println("Workflow Process Engine Started");
+		System.out.println("Workflow Specifications Loaded");
+		System.out.println("Start event entered: Product Order Received");
+		new Helper(new GUI(40, 77));
+
+		Thread.sleep(1500);
+		
 		startProcessInstance(engine);
 	}
 
 	private void startProcessInstance(ProcessEngine engine) {
-		ProcessInstance pi = engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
+		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));
-		engine.getIdentityService().setAuthentication("po", Arrays.asList(Groups.CAMUNDA_ADMIN));
-		//Task task = engine.getTaskService().createTaskQuery().processInstanceId(pi.getId()).singleResult();
-		//engine.getTaskService().claim(task.getId(), "po");
-		//engine.getTaskService().complete(task.getId(), createVariables().putValue("continue", true));
+
+		// engine.getIdentityService().setAuthentication("po",
+		// Arrays.asList(Groups.CAMUNDA_ADMIN));
+		// Task task =
+		// engine.getTaskService().createTaskQuery().processInstanceId(pi.getId()).singleResult();
+		// engine.getTaskService().claim(task.getId(), "po");
+		// engine.getTaskService().complete(task.getId(),
+		// createVariables().putValue("continue", true));
 	}
 
+	@SuppressWarnings("unused")
 	private void createUsers(ProcessEngine engine) {
 		final IdentityService identityService = engine.getIdentityService();
 
@@ -63,7 +77,7 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 			Group camundaAdminGroup = identityService.newGroup(Groups.CAMUNDA_ADMIN);
 			camundaAdminGroup.setName("camunda BPM Administrators");
 			camundaAdminGroup.setType(Groups.GROUP_TYPE_SYSTEM);
-			
+
 			identityService.saveGroup(camundaAdminGroup);
 		}
 
