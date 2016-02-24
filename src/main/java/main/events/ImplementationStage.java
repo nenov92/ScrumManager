@@ -16,14 +16,14 @@ public class ImplementationStage implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(577, 250);
 
-		Thread.sleep(1500);
+		Thread.sleep(Constants.SLEEP_TIME);
 
 		System.out.println("XOR check: More Days for Implementation?");
 		gui = Helper.getGUI();
 		gui.refreshBackground();
 		gui.drawToBackground(682, 237);
 
-		Thread.sleep(1500);
+		Thread.sleep(Constants.SLEEP_TIME);
 
 		Constants.TIME += 1;
 		if (Constants.TIME > 1) {

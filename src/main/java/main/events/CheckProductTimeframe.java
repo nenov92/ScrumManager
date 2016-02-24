@@ -16,13 +16,13 @@ public class CheckProductTimeframe implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(147, 105);
 
-		Thread.sleep(1500);
+		Thread.sleep(Constants.SLEEP_TIME);
 
 		System.out.println("XOR check: More Time?");
 		gui.refreshBackground();
 		gui.drawToBackground(250, 90);
 
-		Thread.sleep(1500);
+		Thread.sleep(Constants.SLEEP_TIME);
 
 		if (Constants.TIME > 1) {
 			System.out.println("XOR result: NO");

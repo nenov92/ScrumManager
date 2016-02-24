@@ -7,6 +7,12 @@ import java.util.List;
 
 import javax.swing.JTextArea;
 
+/**
+ * 
+ * @author Miroslav Nenov
+ * code adapted from: http://stackoverflow.com/questions/342990/create-java-console-inside-a-gui-panel
+ */
+
 public class Appender implements Runnable {
 	private final JTextArea textArea;
 	private final LinkedList<Integer> lengths; // length of lines within text area

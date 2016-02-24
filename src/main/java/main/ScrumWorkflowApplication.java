@@ -32,7 +32,7 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 		System.out.println("Start event entered: Product Order Received");
 		new Helper(new GUI(40, 77));
 
-		Thread.sleep(1500);
+		Thread.sleep(Constants.SLEEP_TIME);
 		
 		startProcessInstance(engine);
 	}

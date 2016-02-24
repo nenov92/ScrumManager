@@ -1,5 +1,6 @@
 package main.events;
 
+import main.Constants;
 import main.gui.GUI;
 import main.gui.Helper;
 
@@ -15,7 +16,7 @@ public class RetrospectiveMeeting implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(1025, 250);
 
-		Thread.sleep(1500);
+		Thread.sleep(Constants.SLEEP_TIME);
 
 	}
 }

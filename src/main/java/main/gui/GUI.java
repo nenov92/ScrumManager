@@ -11,6 +11,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Miroslav Nenov
+ * code adapted from: http://stackoverflow.com/posts/28482233/revisions
+ */
+
 @SuppressWarnings("serial")
 public class GUI extends JPanel {
 	private static final Color COLOR = Color.BLUE;

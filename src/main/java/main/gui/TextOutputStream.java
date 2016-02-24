@@ -5,6 +5,12 @@ import java.io.UnsupportedEncodingException;
 
 import javax.swing.JTextArea;
 
+/**
+ * 
+ * @author Miroslav Nenov
+ * code adapted from: http://stackoverflow.com/questions/342990/create-java-console-inside-a-gui-panel
+ */
+
 public class TextOutputStream extends OutputStream {
 
 	private byte[] oneByte;
