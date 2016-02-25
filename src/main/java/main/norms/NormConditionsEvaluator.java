@@ -55,7 +55,6 @@ public class NormConditionsEvaluator {
 
 	public static void main(String[] args) {
 		String sample = "condition == true && condition2 > 3 || condition3 == false";
-		// String sample = "condition == true";
 
 		String a = processConditions(sample);
 		System.out.println(a);
