@@ -33,10 +33,12 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 		new Helper(new GUI(40, 77));
 
 		Thread.sleep(Constants.SLEEP_TIME);
-		
-		startProcessInstance(engine);
+
+		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
+				createVariables().putValue("continue", true).putValue("implement", false));
 	}
 
+	@SuppressWarnings("unused")
 	private void startProcessInstance(ProcessEngine engine) {
 		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));

@@ -1,5 +1,5 @@
 package test;
-import main.norms.NormConditionsEvaluator;
+import main.norms.ConditionEvaluator;
 
 import org.junit.Test;
 
@@ -11,15 +11,15 @@ public class General {
 	@Test
 	public void evaluatorTest() {
 		String expression = "true == true && 5 > 3 || true == false";
-		boolean result = NormConditionsEvaluator.evaluate(expression);
+		boolean result = ConditionEvaluator.evaluate(expression);
 		assertTrue("Error", result);
 		
 		expression = "false == true";
-		result = NormConditionsEvaluator.evaluate(expression);
+		result = ConditionEvaluator.evaluate(expression);
 		assertFalse("Error", result);
 		
 		expression = "false == !true";
-		result = NormConditionsEvaluator.evaluate(expression);
+		result = ConditionEvaluator.evaluate(expression);
 		assertTrue("Error", result);
 	}
 }

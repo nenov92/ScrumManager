@@ -3,6 +3,7 @@ package main.events;
 import main.Constants;
 import main.gui.GUI;
 import main.gui.Helper;
+import main.norms.NormChecker;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -17,6 +18,9 @@ public class CheckProductTimeframe implements JavaDelegate {
 		gui.drawToBackground(147, 105);
 
 		Thread.sleep(Constants.SLEEP_TIME);
+
+		// check norms which apply to this event
+		NormChecker.temp();
 
 		System.out.println("XOR check: More Time?");
 		gui.refreshBackground();

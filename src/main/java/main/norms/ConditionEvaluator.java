@@ -13,7 +13,7 @@ import main.database.Symbol;
 
 import org.hibernate.Session;
 
-public class NormConditionsEvaluator {
+public class ConditionEvaluator {
 
 	// sample input: "condition == true && condition2 > 3 || condition3 == false"
 	public static String processConditions(String conditions) {

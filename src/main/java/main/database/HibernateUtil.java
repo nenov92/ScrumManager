@@ -13,10 +13,8 @@ public class HibernateUtil {
 		try {
 			Configuration configuration = new Configuration();
 			configuration.configure("/config/hibernate.cfg.xml");
-			System.out.println("Hibernate Configuration loaded");
 
 			ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
-			System.out.println("Hibernate serviceRegistry created");
 
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Throwable ex) {
