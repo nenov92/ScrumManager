@@ -1,5 +1,16 @@
 package test;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import main.norms.ActionFunction;
 import main.norms.ConditionEvaluator;
+import main.norms.Norm;
+import main.norms.NormChecker;
+import main.norms.Obligation;
+import main.scrum.roles.ProductOwner;
+import main.scrum.roles.Role;
+import main.scrum.roles.ScrumParticipant;
 
 import org.junit.Test;
 
@@ -13,13 +24,27 @@ public class General {
 		String expression = "true == true && 5 > 3 || true == false";
 		boolean result = ConditionEvaluator.evaluate(expression);
 		assertTrue("Error", result);
-		
+
 		expression = "false == true";
 		result = ConditionEvaluator.evaluate(expression);
 		assertFalse("Error", result);
-		
+
 		expression = "false == !true";
 		result = ConditionEvaluator.evaluate(expression);
 		assertTrue("Error", result);
+	}
+
+	@Test
+	public void normObligationTest() {
+		Set<ScrumParticipant> participants = new HashSet<ScrumParticipant>();
+		ProductOwner p = new ProductOwner("Jack");
+		participants.add(p);
+		
+		ActionFunction function = new ActionFunction("startSprint", new String[] {});
+		Obligation obligation = new Obligation(Role.PRODUCT_OWNER, function, "condition == true && condition2 > 3 || condition3 == false", "condition == false", "condition == true", "");
+		Norm norm = new Norm();
+		norm.addObligation(obligation);
+		
+		NormChecker.checkNorms(norm, participants);
 	}
 }

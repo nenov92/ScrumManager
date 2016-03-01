@@ -1,6 +1,6 @@
 package main.scrum.roles;
 
-import main.Role;
+import main.Helper;
 
 public class ProductOwner extends ScrumParticipant {
 	private static Role role = Role.PRODUCT_OWNER;
@@ -28,6 +28,10 @@ public class ProductOwner extends ScrumParticipant {
 
 	public void startSprint() {
 		System.out.println("ProductOwner: Starting Sprint");
+
+		Helper.updateSymbolRecord("groomingSession", "true");
+		Helper.updateSymbolRecord("activeSprint", "true");
+		Helper.updateSymbolRecord("checkRequirements", "false");
 	}
 
 	@Override

@@ -42,14 +42,6 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 	private void startProcessInstance(ProcessEngine engine) {
 		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));
-
-		// engine.getIdentityService().setAuthentication("po",
-		// Arrays.asList(Groups.CAMUNDA_ADMIN));
-		// Task task =
-		// engine.getTaskService().createTaskQuery().processInstanceId(pi.getId()).singleResult();
-		// engine.getTaskService().claim(task.getId(), "po");
-		// engine.getTaskService().complete(task.getId(),
-		// createVariables().putValue("continue", true));
 	}
 
 	@SuppressWarnings("unused")

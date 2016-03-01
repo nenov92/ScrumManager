@@ -1,6 +1,6 @@
 package main.norms;
 
-import main.Role;
+import main.scrum.roles.Role;
 
 public class Obligation {
 
@@ -8,20 +8,20 @@ public class Obligation {
 	private ActionFunction actionFunction;
 	private String activationCondition;
 	private String expriationCondition;
-	private String obligationFulfilledResult;
-	private String obligationNotFulfilledResult;
+	private String fulfilledResult;
+	private String notFulfilledResult;
 
 	public Obligation() {
 	}
 
 	public Obligation(Role roleId, ActionFunction actionFunction, String activationCondition, String expriationCondition,
-			String obligationFulfilledResult, String obligationNotFulfilledResult) {
+			String fulfilledResult, String notFulfilledResult) {
 		this.roleId = roleId;
 		this.actionFunction = actionFunction;
 		this.activationCondition = activationCondition;
 		this.expriationCondition = expriationCondition;
-		this.obligationFulfilledResult = obligationFulfilledResult;
-		this.obligationNotFulfilledResult = obligationNotFulfilledResult;
+		this.fulfilledResult = fulfilledResult;
+		this.notFulfilledResult = notFulfilledResult;
 	}
 
 	public Role getRoleId() {
@@ -56,25 +56,25 @@ public class Obligation {
 		this.expriationCondition = expriationCondition;
 	}
 
-	public String getObligationFulfilledResult() {
-		return obligationFulfilledResult;
+	public String getFulfilledResult() {
+		return fulfilledResult;
 	}
 
-	public void setObligationFulfilledResult(String obligationFulfilledResult) {
-		this.obligationFulfilledResult = obligationFulfilledResult;
+	public void setFulfilledResult(String fulfilledResult) {
+		this.fulfilledResult = fulfilledResult;
 	}
 
-	public String getObligationNotFulfilledResult() {
-		return obligationNotFulfilledResult;
+	public String getNotFulfilledResult() {
+		return notFulfilledResult;
 	}
 
-	public void setObligationNotFulfilledResult(String obligationNotFulfilledResult) {
-		this.obligationNotFulfilledResult = obligationNotFulfilledResult;
+	public void setNotFulfilledResult(String notFulfilledResult) {
+		this.notFulfilledResult = notFulfilledResult;
 	}
 
 	@Override
 	public String toString() {
-		return "Obligation [roleId: " + roleId + ", actionFunction: " + actionFunction.getName() + ", activationCondition: " + activationCondition + ", expriationCondition: " + expriationCondition + ", obligationFulfilledResult: " + obligationFulfilledResult + ", obligationNotFulfilledResult: " + obligationNotFulfilledResult + "]";
+		return "Obligation [roleId: " + roleId + ", actionFunction: " + actionFunction.getName() + ", activationCondition: " + activationCondition + ", expriationCondition: " + expriationCondition + ", fulfilledResult: " + fulfilledResult + ", notFulfilledResult: " + notFulfilledResult + "]";
 	}
 
 }

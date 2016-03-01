@@ -5,24 +5,20 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import main.Role;
 import main.scrum.roles.ProductOwner;
+import main.scrum.roles.Role;
 import main.scrum.roles.ScrumParticipant;
 
-//																				activation condition 
-//obligation(ProductOwner, startSprint(ProductId, ScrumId, previousSprintId), checkRequ = true AND activeSprint == false AND productTimeFrame > 0, checkReq = false, activeSprint==true)
 public class NormChecker {
-	private static ProductOwner p = new ProductOwner("Jack");
-	private static Method method;
-	private static Set<ScrumParticipant> participants = new HashSet<ScrumParticipant>();
-
+	
 	public static void checkNorms(Norm norm, Set<ScrumParticipant> participants) {
+		Method method;
 		for (Obligation obligation : norm.getObligations()) {
-			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) == true &&
-					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpriationCondition())) == false) {
+			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
+					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpriationCondition()))) {
 
 				System.out.println("Obligation activated: " + obligation);
-				
+
 				for (ScrumParticipant participant : participants) {
 					// if the obligaion role matches the participant's role
 					if (participant.getRole().equals(obligation.getRoleId())) {
@@ -36,18 +32,18 @@ public class NormChecker {
 									parameterTypes[i] = String.class;
 								}
 
-								method = p.getClass().getMethod(obligation.getActionFunction().getName(), parameterTypes);
+								method = participant.getClass().getMethod(obligation.getActionFunction().getName(), parameterTypes);
 								try {
 									System.out.println("Action function triggered: " + obligation.getActionFunction().getName());
-									method.invoke(p, (Object[]) obligation.getActionFunction().getParameters());
+									method.invoke(participant, (Object[]) obligation.getActionFunction().getParameters());
 								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 									e.printStackTrace();
 								}
 							} else {
-								method = p.getClass().getMethod(obligation.getActionFunction().getName(), (Class<?>[]) null);
+								method = participant.getClass().getMethod(obligation.getActionFunction().getName(), (Class<?>[]) null);
 								try {
 									System.out.println("Action function triggered: " + obligation.getActionFunction().getName());
-									method.invoke(p);
+									method.invoke(participant);
 								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 									e.printStackTrace();
 								}
@@ -55,7 +51,13 @@ public class NormChecker {
 						} catch (NoSuchMethodException | SecurityException e) {
 							e.printStackTrace();
 						}
-
+						
+						// check the result of the action function of the obligation
+						if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getFulfilledResult()))) {
+							System.out.println("Obligation fulfilled");
+						} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledResult()))) {
+							System.out.println("Obligation not fulfilled");
+						}
 					}
 				}
 
@@ -63,12 +65,14 @@ public class NormChecker {
 		}
 	}
 
-	public static void temp() {
+	public static void checkNorms() {
+		Set<ScrumParticipant> participants = new HashSet<ScrumParticipant>();
+		ProductOwner p = new ProductOwner("Jack");
+		participants.add(p);
 		ActionFunction function = new ActionFunction("startSprint", new String[] {});
-		Obligation obligation = new Obligation(Role.PRODUCT_OWNER, function, "checkRequirements == true && activeSprint == false && productTimeFrame > 0", "checkRequirements == false", "groomingSession = true", "null");
+		Obligation obligation = new Obligation(Role.PRODUCT_OWNER, function, "checkRequirements == true && activeSprint == false && productTimeFrame > 0", "checkRequirements == false", "groomingSession == true && activeSprint == true && checkRequirements == false", "");
 		Norm norm = new Norm();
 		norm.addObligation(obligation);
-		participants.add(p);
 		checkNorms(norm, participants);
 	}
 }

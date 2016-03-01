@@ -15,10 +15,13 @@ import org.hibernate.Session;
 
 public class ConditionEvaluator {
 
-	// sample input: "condition == true && condition2 > 3 || condition3 == false"
 	public static String processConditions(String conditions) {
-		List<String> variables = new ArrayList<String>();
+		if (conditions == null || conditions.equals("")) {
+			return null;
+		}
 		
+		List<String> variables = new ArrayList<String>();
+
 		// split to a tuples of three: <variable, operator, value> by && or ||
 		String[] parsed = conditions.split("(&& )|(\\|\\| )");
 
@@ -43,6 +46,9 @@ public class ConditionEvaluator {
 
 	// use JavaScript engine to evaluate the string expression
 	public static Boolean evaluate(String expression) {
+		if (expression == null || expression.equals("")) {
+			return null;
+		}
 		try {
 			ScriptEngineManager sem = new ScriptEngineManager();
 			ScriptEngine scriptEngine = sem.getEngineByName("JavaScript");
@@ -51,13 +57,5 @@ public class ConditionEvaluator {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public static void main(String[] args) {
-		String sample = "condition == true && condition2 > 3 || condition3 == false";
-
-		String a = processConditions(sample);
-		System.out.println(a);
-		System.out.println(evaluate(a));
 	}
 }

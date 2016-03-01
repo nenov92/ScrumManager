@@ -1,7 +1,5 @@
 package main.scrum.roles;
 
-import main.Role;
-
 public class ScrumParticipant {
 	private Role role;
 

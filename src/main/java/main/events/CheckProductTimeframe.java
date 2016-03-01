@@ -20,7 +20,7 @@ public class CheckProductTimeframe implements JavaDelegate {
 		Thread.sleep(Constants.SLEEP_TIME);
 
 		// check norms which apply to this event
-		NormChecker.temp();
+		NormChecker.checkNorms();
 
 		System.out.println("XOR check: More Time?");
 		gui.refreshBackground();
@@ -35,6 +35,9 @@ public class CheckProductTimeframe implements JavaDelegate {
 			gui.drawToBackground(412, 77);
 
 			execution.getProcessInstance().setVariable("continue", false);
+			
+			// as the workflow is going into end state refresh the database
+			main.Helper.refreshDatabase();
 		} else {
 			System.out.println("XOR result: YES");
 		}
