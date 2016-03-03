@@ -1,5 +1,7 @@
 package main.database;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -48,6 +50,13 @@ public class GenericDaoImpl<T> implements GenericDaoInterface<T> {
 	public T findBySymbolName(String name) {
 		Criteria criteria = getCurrentSession().createCriteria(this.entityClass).add(Restrictions.eq("name", name));
 		return (T) criteria.uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findBySymbolNameRegex(String regex) {
+		Criteria criteria = getCurrentSession().createCriteria(this.entityClass).add(Restrictions.like("name", regex));
+		return criteria.list();
 	}
 
 }

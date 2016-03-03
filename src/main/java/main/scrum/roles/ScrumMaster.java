@@ -3,22 +3,18 @@ package main.scrum.roles;
 import main.Helper;
 import main.gui.InputConsole;
 
-public class ProductOwner extends ScrumParticipant implements Runnable {
-	private static Role role = Role.PRODUCT_OWNER;
+public class ScrumMaster extends ScrumParticipant implements Runnable {
+	private static Role role = Role.SCRUM_MASTER;
 	private String name;
 	private InputConsole console;
 	private volatile boolean showConsole = true;
 
-	public ProductOwner() {
+	public ScrumMaster() {
 	}
 
-	public ProductOwner(String name) {
+	public ScrumMaster(String name) {
 		super(role);
 		this.setName(name);
-	}
-
-	public Role getRole() {
-		return role;
 	}
 
 	public String getName() {
@@ -29,12 +25,8 @@ public class ProductOwner extends ScrumParticipant implements Runnable {
 		this.name = name;
 	}
 
-	public void startSprint() {
-		System.out.println("ProductOwner: Starting Sprint");
-
-		Helper.updateSymbolRecord("groomingSession", "true");
-		Helper.updateSymbolRecord("activeSprint", "true");
-		Helper.updateSymbolRecord("checkRequirements", "false");
+	public static void assignTask() {
+		Helper.incrementSymbolRecord("task1Assignees");
 	}
 
 	@Override
@@ -49,10 +41,14 @@ public class ProductOwner extends ScrumParticipant implements Runnable {
 
 	@Override
 	public void run() {
-		console = new InputConsole("PO Terminal", new ProductOwner("Sam"));
+		console = new InputConsole("SM Terminal", new ScrumMaster("Jack"));
 		console.setVisible(showConsole);
-
-		System.out.println("Hello, I am PO");
+		
+		if(showConsole == false){
+			System.out.println("ShouldClose");
+		}
+		
+		System.out.println("Hello, I am SM");
 	}
 
 	public void closeConsole() {
