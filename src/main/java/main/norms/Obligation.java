@@ -4,6 +4,7 @@ import main.scrum.roles.Role;
 
 public class Obligation {
 
+	private int id;
 	private Role roleId;
 	private ActionFunction actionFunction;
 	private String activationCondition;
@@ -22,6 +23,25 @@ public class Obligation {
 		this.expriationCondition = expriationCondition;
 		this.fulfilledResult = fulfilledResult;
 		this.notFulfilledResult = notFulfilledResult;
+	}
+
+	public Obligation(int id, Role roleId, ActionFunction actionFunction, String activationCondition, String expriationCondition,
+			String fulfilledResult, String notFulfilledResult) {
+		this.id = id;
+		this.roleId = roleId;
+		this.actionFunction = actionFunction;
+		this.activationCondition = activationCondition;
+		this.expriationCondition = expriationCondition;
+		this.fulfilledResult = fulfilledResult;
+		this.notFulfilledResult = notFulfilledResult;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Role getRoleId() {
@@ -70,6 +90,25 @@ public class Obligation {
 
 	public void setNotFulfilledResult(String notFulfilledResult) {
 		this.notFulfilledResult = notFulfilledResult;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o != null && o instanceof Obligation) {
+			Obligation other = (Obligation) o;
+			if (this.getId() == other.getId()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int PRIME = 31;
+		int result = (int) (PRIME + this.id);
+		return result;
 	}
 
 	@Override

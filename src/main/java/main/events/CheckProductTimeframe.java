@@ -3,7 +3,6 @@ package main.events;
 import main.Constants;
 import main.gui.GUI;
 import main.gui.Helper;
-import main.norms.NormChecker;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -20,7 +19,7 @@ public class CheckProductTimeframe implements JavaDelegate {
 		Thread.sleep(Constants.SLEEP_TIME);
 
 		// check norms which apply to this event
-		NormChecker.checkNorms();
+		// NormChecker.checkNorms();
 
 		System.out.println("XOR check: More Time?");
 		gui.refreshBackground();
@@ -28,12 +27,18 @@ public class CheckProductTimeframe implements JavaDelegate {
 
 		Thread.sleep(Constants.SLEEP_TIME);
 
+		while (main.Helper.isObligationActive()) {
+			Thread.sleep(5000);
+		}
+		
 		if (Constants.TIME > 1) {
 			System.out.println("XOR result: NO");
 			System.out.println("Final event entered: Product Lifecycle Finished");
 			gui.refreshBackground();
 			gui.drawToBackground(412, 77);
 
+			main.Helper.stopThreads();
+			
 			execution.getProcessInstance().setVariable("continue", false);
 			
 			// as the workflow is going into end state refresh the database

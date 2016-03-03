@@ -25,6 +25,7 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 
 	@PostDeploy
 	public void startProcess(ProcessEngine engine) throws IOException, InterruptedException {
+		main.Helper.refreshDatabase();
 		new Console();
 
 		System.out.println("Workflow Process Engine Started");
@@ -33,6 +34,8 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 		new Helper(new GUI(40, 77));
 
 		Thread.sleep(Constants.SLEEP_TIME);
+		
+		main.Helper.runThreads();
 
 		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));
