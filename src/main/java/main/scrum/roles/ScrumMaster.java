@@ -2,8 +2,6 @@ package main.scrum.roles;
 
 import main.Helper;
 import main.gui.InputConsole;
-import main.norms.NormCheck;
-import main.norms.Obligation;
 
 public class ScrumMaster extends ScrumParticipant implements Runnable {
 	private static Role role = Role.SCRUM_MASTER;
@@ -35,6 +33,21 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 		Helper.incrementSymbolRecord("task1Assignees");
 	}
 
+	public void closeConsole() {
+		this.running = false;
+	}
+
+	@Override
+	public void run() {
+		console = new InputConsole("Scrum Master Terminal", new ScrumMaster("Jack"));
+		console.setVisible(running);
+
+		System.out.println("Scrum Master joining workflow");
+		while (running) {
+			Helper.addActiveNormsToConsole(console, getRole());
+		}
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -45,34 +58,4 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 		return sb.toString();
 	}
 
-	@Override
-	public void run() {
-		console = new InputConsole("SM Terminal", new ScrumMaster("Jack"));
-		console.setVisible(running);
-
-		System.out.println("Hello, I am SM");
-		while (running) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if (Helper.isObligationActive()) {
-				console.getObList().removeAllElements();
-				for (Obligation o : NormCheck.getActiveObligations()) {
-					if (o.getRoleId() == getRole()) {
-						console.getObList().addElement(o.getActionFunction().getName());
-					}
-				}
-			} else {
-				if (console.getObList().size() > 0) {
-					console.getObList().removeAllElements();
-				}
-			}
-		}
-	}
-
-	public void closeConsole() {
-		this.running = false;
-	}
 }

@@ -1,7 +1,6 @@
 package main.gui;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -25,41 +24,26 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import main.scrum.roles.ProductOwner;
 import main.scrum.roles.Role;
 import main.scrum.roles.ScrumParticipant;
 
 public class InputConsole extends JFrame implements DocumentListener {
 
-	private JLabel status;
+	private static final long serialVersionUID = -7463270687956560650L;
+
 	private JPanel contentPane;
-	private JTextField entry;
+	private JLabel status;
+	private JTextField methodField;
 	private DefaultListModel<String> obList;
 	private DefaultListModel<String> prohList;
 
 	private ScrumParticipant user;
 	private List<String> content;
 
-	final static Color ERROR_COLOR = Color.PINK;
+	final static Color ERROR_COLOUR = Color.PINK;
 	final static String ENTER_ACTION = "enter";
 
-	final Color entryColor;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InputConsole frame = new InputConsole("123", new ProductOwner());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	final Color bgColour;
 
 	/**
 	 * Create the frame.
@@ -68,7 +52,7 @@ public class InputConsole extends JFrame implements DocumentListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 200);
 		setTitle(windowName);
-		
+
 		initialiseComponents();
 		this.user = user;
 
@@ -79,13 +63,11 @@ public class InputConsole extends JFrame implements DocumentListener {
 			content.add("assignTask");
 		}
 
-		
-		
-		entryColor = entry.getBackground();
-		entry.getDocument().addDocumentListener(this);
+		bgColour = methodField.getBackground();
+		methodField.getDocument().addDocumentListener(this);
 
-		InputMap im = entry.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-		ActionMap am = entry.getActionMap();
+		InputMap im = methodField.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap am = methodField.getActionMap();
 		im.put(KeyStroke.getKeyStroke("ENTER"), ENTER_ACTION);
 		am.put(ENTER_ACTION, new EnterAction());
 	}
@@ -93,7 +75,7 @@ public class InputConsole extends JFrame implements DocumentListener {
 	private void initialiseComponents() {
 		obList = new DefaultListModel<String>();
 		prohList = new DefaultListModel<String>();
-		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -105,10 +87,10 @@ public class InputConsole extends JFrame implements DocumentListener {
 		jLabel.setBounds(10, 114, 166, 14);
 		contentPane.add(jLabel);
 
-		entry = new JTextField();
-		entry.setBounds(186, 111, 238, 20);
-		contentPane.add(entry);
-		entry.setColumns(10);
+		methodField = new JTextField();
+		methodField.setBounds(186, 111, 238, 20);
+		contentPane.add(methodField);
+		methodField.setColumns(10);
 
 		status = new JLabel("");
 		status.setForeground(Color.DARK_GRAY);
@@ -155,17 +137,17 @@ public class InputConsole extends JFrame implements DocumentListener {
 	}
 
 	public void checkIfMethodDefiened() {
-		String s = entry.getText();
+		String s = methodField.getText();
 		if (s.length() <= 0) {
 			message("No method entered.");
 			return;
 		}
 
 		if (content.contains(s)) { // match found
-			entry.setBackground(entryColor);
+			methodField.setBackground(bgColour);
 			message("'" + s + "' method is defined. Press Enter to run this method.");
 		} else {
-			entry.setBackground(ERROR_COLOR);
+			methodField.setBackground(ERROR_COLOUR);
 			message("'" + s + "' method is not defined.");
 		}
 	}
@@ -196,15 +178,15 @@ public class InputConsole extends JFrame implements DocumentListener {
 
 		public void actionPerformed(ActionEvent ev) {
 			try {
-				Method method = user.getClass().getMethod(entry.getText(), (Class<?>[]) null);
+				Method method = user.getClass().getMethod(methodField.getText(), (Class<?>[]) null);
 				try {
-					System.out.println("Action function triggered: " + entry.getText());
+					System.out.println("Action function triggered: " + methodField.getText());
 					method.invoke(user);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
-				entry.setText("");
-				entry.setBackground(entryColor);
+				methodField.setText("");
+				methodField.setBackground(bgColour);
 			} catch (NoSuchMethodException | SecurityException e1) {
 				status.setText("No such method defined");
 			}

@@ -25,9 +25,11 @@ public class NormCheck implements Runnable {
 
 	@Override
 	public void run() {
-		System.out.println("NormChecker is running");
+		System.out.println("Norm Check engine is running");
+		
 		activeObligations = new HashSet<Obligation>();
 		Norm norm = loadNorms();
+		
 		while (running) {
 			activateObligations(norm);
 			try {

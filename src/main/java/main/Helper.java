@@ -3,8 +3,11 @@ package main;
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
 import main.database.Symbol;
+import main.gui.InputConsole;
 import main.norms.NormCheck;
+import main.norms.Obligation;
 import main.scrum.roles.ProductOwner;
+import main.scrum.roles.Role;
 import main.scrum.roles.ScrumMaster;
 
 import org.hibernate.Session;
@@ -48,7 +51,6 @@ public class Helper {
 	}
 
 	public static void runThreads() {
-		Helper.refreshDatabase();
 		n = new NormCheck();
 		ProductOwner p = new ProductOwner();
 		ScrumMaster s = new ScrumMaster();
@@ -71,6 +73,26 @@ public class Helper {
 			return true;
 		}
 		return false;
+	}
+
+	public static void addActiveNormsToConsole(InputConsole console, Role role) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if (isObligationActive()) {
+			console.getObList().removeAllElements();
+			for (Obligation o : NormCheck.getActiveObligations()) {
+				if (o.getRoleId() == role) {
+					console.getObList().addElement(o.getActionFunction().getName());
+				}
+			}
+		} else {
+			if (console.getObList().size() > 0) {
+				console.getObList().removeAllElements();
+			}
+		}
 	}
 
 }

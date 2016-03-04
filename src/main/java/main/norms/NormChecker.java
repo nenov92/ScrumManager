@@ -69,6 +69,7 @@ public class NormChecker {
 	}
 	
 	public static void checkProhibitions(Norm norm, Set<ScrumParticipant> participants) {
+		@SuppressWarnings("unused")
 		Method method;
 		for (Prohibition prohibition : norm.getProhibitions()) {
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) &&
@@ -81,7 +82,6 @@ public class NormChecker {
 							method = participant.getClass().getMethod(prohibition.getPerform().getName(), (Class<?>[]) null);
 							try {
 								System.out.println("Perform of function: " + prohibition.getPerform().getName() + " prohibited");
-								//method.setAccessible(false);
 							} catch (IllegalArgumentException e) {
 								e.printStackTrace();
 							}
