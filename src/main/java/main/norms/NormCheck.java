@@ -70,7 +70,7 @@ public class NormCheck implements Runnable {
 	public static void activateObligations(Norm norm) {
 		for (Obligation obligation : norm.getObligations()) {
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
-					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpriationCondition()))) {
+					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpriationCondition())) && !getActiveObligations().contains(obligation)) {
 
 				System.out.println("Obligation activated: " + obligation.getRoleId() + " has to perform action " + obligation.getActionFunction().getName());
 				addActiveObligation(obligation);
