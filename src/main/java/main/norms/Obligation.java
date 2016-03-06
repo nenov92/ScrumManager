@@ -6,34 +6,24 @@ public class Obligation {
 
 	private int id;
 	private Role roleId;
-	private ActionFunction actionFunction;
+	private String actionFunction;
 	private String activationCondition;
-	private String expriationCondition;
-	private String fulfilledResult;
-	private String notFulfilledResult;
+	private String expirationCondition;
+	private String fulfilledCondition;
+	private String notFulfilledCondition;
 
 	public Obligation() {
 	}
 
-	public Obligation(Role roleId, ActionFunction actionFunction, String activationCondition, String expriationCondition,
-			String fulfilledResult, String notFulfilledResult) {
-		this.roleId = roleId;
-		this.actionFunction = actionFunction;
-		this.activationCondition = activationCondition;
-		this.expriationCondition = expriationCondition;
-		this.fulfilledResult = fulfilledResult;
-		this.notFulfilledResult = notFulfilledResult;
-	}
-
-	public Obligation(int id, Role roleId, ActionFunction actionFunction, String activationCondition, String expriationCondition,
-			String fulfilledResult, String notFulfilledResult) {
+	public Obligation(int id, Role roleId, String actionFunction, String activationCondition, String expirationCondition,
+			String fulfilledCondition, String notFulfilledCondition) {
 		this.id = id;
 		this.roleId = roleId;
 		this.actionFunction = actionFunction;
 		this.activationCondition = activationCondition;
-		this.expriationCondition = expriationCondition;
-		this.fulfilledResult = fulfilledResult;
-		this.notFulfilledResult = notFulfilledResult;
+		this.expirationCondition = expirationCondition;
+		this.fulfilledCondition = fulfilledCondition;
+		this.notFulfilledCondition = notFulfilledCondition;
 	}
 
 	public int getId() {
@@ -52,11 +42,11 @@ public class Obligation {
 		this.roleId = roleId;
 	}
 
-	public ActionFunction getActionFunction() {
+	public String getActionFunction() {
 		return actionFunction;
 	}
 
-	public void setActionFunction(ActionFunction actionFunction) {
+	public void setActionFunction(String actionFunction) {
 		this.actionFunction = actionFunction;
 	}
 
@@ -68,28 +58,28 @@ public class Obligation {
 		this.activationCondition = activationCondition;
 	}
 
-	public String getExpriationCondition() {
-		return expriationCondition;
+	public String getExpirationCondition() {
+		return expirationCondition;
 	}
 
-	public void setExpriationCondition(String expriationCondition) {
-		this.expriationCondition = expriationCondition;
+	public void setExpirationCondition(String expirationCondition) {
+		this.expirationCondition = expirationCondition;
 	}
 
-	public String getFulfilledResult() {
-		return fulfilledResult;
+	public String getFulfilledCondition() {
+		return fulfilledCondition;
 	}
 
-	public void setFulfilledResult(String fulfilledResult) {
-		this.fulfilledResult = fulfilledResult;
+	public void setFulfilledCondition(String fulfilledCondition) {
+		this.fulfilledCondition = fulfilledCondition;
 	}
 
-	public String getNotFulfilledResult() {
-		return notFulfilledResult;
+	public String getNotFulfilledCondition() {
+		return notFulfilledCondition;
 	}
 
-	public void setNotFulfilledResult(String notFulfilledResult) {
-		this.notFulfilledResult = notFulfilledResult;
+	public void setNotFulfilledCondition(String notFulfilledCondition) {
+		this.notFulfilledCondition = notFulfilledCondition;
 	}
 
 	@Override
@@ -113,7 +103,7 @@ public class Obligation {
 
 	@Override
 	public String toString() {
-		return "Obligation [roleId: " + roleId + ", actionFunction: " + actionFunction.getName() + ", activationCondition: " + activationCondition + ", expriationCondition: " + expriationCondition + ", fulfilledResult: " + fulfilledResult + ", notFulfilledResult: " + notFulfilledResult + "]";
+		return "Obligation [id: " + id + ", roleId: " + roleId + ", actionFunction: " + actionFunction + ", activationCondition: " + activationCondition + ", expriationCondition: " + expirationCondition + ", fulfilledResult: " + fulfilledCondition + ", notFulfilledResult: " + notFulfilledCondition + "]";
 	}
 
 }

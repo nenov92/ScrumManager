@@ -17,7 +17,7 @@ public class NormChecker {
 		Method method;
 		for (Obligation obligation : norm.getObligations()) {
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
-					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpriationCondition()))) {
+					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpirationCondition()))) {
 
 				System.out.println("Obligation activated: " + obligation);
 
@@ -28,37 +28,37 @@ public class NormChecker {
 						checkProhibitions(norm, participants);
 						try {
 							// check if the method to be called has any parameters and if so, call it with the given parameters; otherwise call it without any parameters
-							if (obligation.getActionFunction().getParameters().length > 0) {
-								@SuppressWarnings("rawtypes")
-								Class[] parameterTypes = new Class[obligation.getActionFunction().getParameters().length];
-								for (int i = 0; i < parameterTypes.length; i++) {
-									parameterTypes[i] = String.class;
-								}
-
-								method = participant.getClass().getMethod(obligation.getActionFunction().getName(), parameterTypes);
+//							if (obligation.getActionFunction().getParameters().length > 0) {
+//								@SuppressWarnings("rawtypes")
+//								Class[] parameterTypes = new Class[obligation.getActionFunction().getParameters().length];
+//								for (int i = 0; i < parameterTypes.length; i++) {
+//									parameterTypes[i] = String.class;
+//								}
+//
+//								method = participant.getClass().getMethod(obligation.getActionFunction().getName(), parameterTypes);
+//								try {
+//									System.out.println("Action function triggered: " + obligation.getActionFunction().getName());
+//									method.invoke(participant, (Object[]) obligation.getActionFunction().getParameters());
+//								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+//									e.printStackTrace();
+//								}
+//							} else {
+								method = participant.getClass().getMethod(obligation.getActionFunction(), (Class<?>[]) null);
 								try {
-									System.out.println("Action function triggered: " + obligation.getActionFunction().getName());
-									method.invoke(participant, (Object[]) obligation.getActionFunction().getParameters());
-								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-									e.printStackTrace();
-								}
-							} else {
-								method = participant.getClass().getMethod(obligation.getActionFunction().getName(), (Class<?>[]) null);
-								try {
-									System.out.println("Action function triggered: " + obligation.getActionFunction().getName());
+									System.out.println("Action function triggered: " + obligation.getActionFunction());
 									method.invoke(participant);
 								} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 									e.printStackTrace();
 								}
-							}
+//							}
 						} catch (NoSuchMethodException | SecurityException e) {
 							e.printStackTrace();
 						}
 						
 						// check the result of the action function of the obligation
-						if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getFulfilledResult()))) {
+						if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getFulfilledCondition()))) {
 							System.out.println("Obligation fulfilled");
-						} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledResult()))) {
+						} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledCondition()))) {
 							System.out.println("Obligation not fulfilled");
 						}
 					}
@@ -73,15 +73,15 @@ public class NormChecker {
 		Method method;
 		for (Prohibition prohibition : norm.getProhibitions()) {
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) &&
-					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpriationCondition()))) {
+					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition()))) {
 				System.out.println("Prohibition activated: " + prohibition);
 
 				for (ScrumParticipant participant : participants) {
 					if (participant.getRole().equals(prohibition.getRoleId())) {
 						try {
-							method = participant.getClass().getMethod(prohibition.getPerform().getName(), (Class<?>[]) null);
+							method = participant.getClass().getMethod(prohibition.getPerform(), (Class<?>[]) null);
 							try {
-								System.out.println("Perform of function: " + prohibition.getPerform().getName() + " prohibited");
+								System.out.println("Perform of function: " + prohibition.getPerform() + " prohibited");
 							} catch (IllegalArgumentException e) {
 								e.printStackTrace();
 							}
@@ -101,11 +101,9 @@ public class NormChecker {
 		participants.add(p);
 		participants.add(s);
 		
-		ActionFunction function = new ActionFunction("startSprint", new String[] {});
-		ActionFunction function2 = new ActionFunction("assignTask", new String[] {});
-		Obligation obligation = new Obligation(Role.PRODUCT_OWNER, function, "checkRequirements == true && activeSprint == false && productTimeFrame > 0", "checkRequirements == false", "groomingSession == true && activeSprint == true && checkRequirements == false", "");
-		Obligation obligation1 = new Obligation(Role.SCRUM_MASTER, function2, "task1Assignees == 0 && planningSession == true", "planningSession == false", "task1Assignees > 0", "task1Assignees == 0");
-		Prohibition prohibition = new Prohibition(Role.SCRUM_MASTER, function2, "task1Assignees == 1 && planningSession == true", "planningSession == false");
+		Obligation obligation = new Obligation(1, Role.PRODUCT_OWNER, "startSprint", "checkRequirements == true && activeSprint == false && productTimeFrame > 0", "checkRequirements == false", "groomingSession == true && activeSprint == true && checkRequirements == false", "");
+		Obligation obligation1 = new Obligation(2, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 0 && planningSession == true", "planningSession == false", "task1Assignees > 0", "task1Assignees == 0");
+		Prohibition prohibition = new Prohibition(1, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false");
 		
 		Norm norm = new Norm();
 		norm.addObligation(obligation1);

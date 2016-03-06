@@ -11,6 +11,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import main.Constants;
+
 /**
  * 
  * @author Miroslav Nenov
@@ -28,7 +30,7 @@ public class GUI extends JPanel {
 	Graphics g;
 
 	public GUI(int x, int y) throws IOException {
-		File file = new File("F:/Dev/Java Workspace/scrum-workflow/src/main/resources/flow.jpg");
+		File file = new File(Constants.GUI_BG_FILE_ON_SERVER);
 		bImg = ImageIO.read(file);
 		prefW = bImg.getWidth();
 		prefH = bImg.getHeight();

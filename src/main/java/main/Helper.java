@@ -1,15 +1,28 @@
 package main;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
 import main.database.Symbol;
 import main.gui.InputConsole;
+import main.norms.Norm;
 import main.norms.NormCheck;
 import main.norms.Obligation;
+import main.parser.NormLexer;
+import main.parser.NormParser;
+import main.parser.NormWalker;
 import main.scrum.roles.ProductOwner;
 import main.scrum.roles.Role;
 import main.scrum.roles.ScrumMaster;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.hibernate.Session;
 
 public class Helper {
@@ -46,7 +59,8 @@ public class Helper {
 		Helper.updateSymbolRecord("groomingSession", "false");
 		Helper.updateSymbolRecord("activeSprint", "false");
 		Helper.updateSymbolRecord("checkRequirements", "true");
-		Helper.updateSymbolRecord("task1Assignees", "0");
+		// Helper.updateSymbolRecord("task1Assignees", "0");
+		Helper.updateSymbolRecord("taskAssignees", "0");
 		Helper.updateSymbolRecord("planningSession", "true");
 	}
 
@@ -85,7 +99,7 @@ public class Helper {
 			console.getObList().removeAllElements();
 			for (Obligation o : NormCheck.getActiveObligations()) {
 				if (o.getRoleId() == role) {
-					console.getObList().addElement(o.getActionFunction().getName());
+					console.getObList().addElement(o.getActionFunction());
 				}
 			}
 		} else {
@@ -93,6 +107,33 @@ public class Helper {
 				console.getObList().removeAllElements();
 			}
 		}
+	}
+
+	public static Norm loadNorms() {
+		InputStream is = System.in;
+		try {
+			is = new FileInputStream(Constants.NORMS_FILE_ON_SERVER);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		ANTLRInputStream input = null;
+		try {
+			input = new ANTLRInputStream(is);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		NormLexer lexer = new NormLexer(input);
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		NormParser parser = new NormParser(tokens);
+		ParseTree tree = parser.prog();
+		ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
+		NormWalker normWalker = new NormWalker();
+		parseTreeWalker.walk(normWalker, tree);
+
+		System.out.println("ANTLR parser has loaded norms");
+		return new Norm(normWalker.getObligations(), normWalker.getProhibitions());
 	}
 
 }

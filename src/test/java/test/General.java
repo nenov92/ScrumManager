@@ -40,11 +40,10 @@ public class General {
 		ProductOwner p = new ProductOwner("Jack");
 		participants.add(p);
 		
-		ActionFunction function = new ActionFunction("startSprint", new String[] {});
-		Obligation obligation = new Obligation(Role.PRODUCT_OWNER, function, "condition == true && condition2 > 3 || condition3 == false", "condition == false", "condition == true", "");
+		Obligation obligation = new Obligation(10, Role.PRODUCT_OWNER, "startSprint", "condition == true && condition2 > 3 || condition3 == false", "condition == false", "condition == true", "");
 		Norm norm = new Norm();
 		norm.addObligation(obligation);
 		
-		NormChecker.checkNorms(norm, participants);
+		//NormChecker.checkObligations(norm, participants);
 	}
 }
