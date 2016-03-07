@@ -61,6 +61,7 @@ public class InputConsole extends JFrame implements DocumentListener {
 			content.add("startSprint");
 		} else if (user.getRole() == Role.SCRUM_MASTER) {
 			content.add("assignTask");
+			content.add("unassignTask");
 		}
 
 		bgColour = methodField.getBackground();

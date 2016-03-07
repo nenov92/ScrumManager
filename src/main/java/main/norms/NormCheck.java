@@ -9,6 +9,7 @@ import main.scrum.roles.Role;
 public class NormCheck implements Runnable {
 
 	private static Set<Obligation> activeObligations;
+	private static Set<Prohibition> activeProhibitions;
 	private volatile boolean running = true;
 
 	public void terminate() {
@@ -23,10 +24,12 @@ public class NormCheck implements Runnable {
 		System.out.println("Norm Check engine is running");
 
 		activeObligations = new HashSet<Obligation>();
+		setActiveProhibitions(new HashSet<Prohibition>());
 		Norm norm = Helper.loadNorms();
 
 		while (running) {
 			activateObligations(norm);
+			activateProhibitions(norm);
 			try {
 				Thread.sleep(10000);
 			} catch (InterruptedException e) {
@@ -52,6 +55,22 @@ public class NormCheck implements Runnable {
 		activeObligations.remove(activeObligation);
 	}
 
+	public static Set<Prohibition> getActiveProhibitions() {
+		return activeProhibitions;
+	}
+
+	public static void setActiveProhibitions(Set<Prohibition> activeProhibitions) {
+		NormCheck.activeProhibitions = activeProhibitions;
+	}
+
+	public static void addActiveProhibition(Prohibition activeProhibition) {
+		activeProhibitions.add(activeProhibition);
+	}
+
+	public static void deleteActiveProhibition(Prohibition activeProhibition) {
+		activeProhibitions.remove(activeProhibition);
+	}
+
 	public static void activateObligations(Norm norm) {
 		for (Obligation obligation : norm.getObligations()) {
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
@@ -70,6 +89,19 @@ public class NormCheck implements Runnable {
 				deleteActiveObligation(obligation);
 			} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledCondition()))) {
 				System.out.println("Obligation for " + obligation.getRoleId() + " to perform action " + obligation.getActionFunction() + " has NOT been fulfilled");
+			}
+		}
+	}
+
+	public static void activateProhibitions(Norm norm) {
+		for (Prohibition prohibition : norm.getProhibitions()) {
+			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) &&
+					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition()))) {
+				System.out.println("Prohibition activated: " + prohibition.getRoleId() + " is prohibited to perform " + prohibition.getPerform());
+				addActiveProhibition(prohibition);
+			} else if ((ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) == false ||
+					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition()))) && getActiveProhibitions().contains(prohibition)) {
+				deleteActiveProhibition(prohibition);
 			}
 		}
 	}

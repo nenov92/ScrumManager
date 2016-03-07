@@ -12,6 +12,7 @@ import main.gui.InputConsole;
 import main.norms.Norm;
 import main.norms.NormCheck;
 import main.norms.Obligation;
+import main.norms.Prohibition;
 import main.parser.NormLexer;
 import main.parser.NormParser;
 import main.parser.NormWalker;
@@ -55,6 +56,18 @@ public class Helper {
 		SessionUtil.commitTransaction();
 	}
 
+	public static void decrementSymbolRecord(String name) {
+		Session session = SessionUtil.getINSTANCE();
+		GenericDaoImpl<Symbol> symbolDao = new GenericDaoImpl<Symbol>(session, Symbol.class);
+		SessionUtil.beginTransaction();
+		Symbol symbol = symbolDao.findBySymbolName(name);
+		if (symbol != null) {
+			symbol.setCurrentValue("" + (Integer.parseInt(symbol.getCurrentValue()) - 1));
+			symbolDao.createOrUpdate(symbol);
+		}
+		SessionUtil.commitTransaction();
+	}
+
 	public static void refreshDatabase() {
 		Helper.updateSymbolRecord("groomingSession", "false");
 		Helper.updateSymbolRecord("activeSprint", "false");
@@ -89,6 +102,13 @@ public class Helper {
 		return false;
 	}
 
+	public static boolean isProhibitionActive() {
+		if (NormCheck.getActiveProhibitions().size() > 0) {
+			return true;
+		}
+		return false;
+	}
+
 	public static void addActiveNormsToConsole(InputConsole console, Role role) {
 		try {
 			Thread.sleep(1000);
@@ -105,6 +125,19 @@ public class Helper {
 		} else {
 			if (console.getObList().size() > 0) {
 				console.getObList().removeAllElements();
+			}
+		}
+
+		if (isProhibitionActive()) {
+			console.getProhList().removeAllElements();
+			for (Prohibition p : NormCheck.getActiveProhibitions()) {
+				if (p.getRoleId() == role) {
+					console.getProhList().addElement(p.getPerform());
+				}
+			}
+		} else {
+			if (console.getProhList().size() > 0) {
+				console.getProhList().removeAllElements();
 			}
 		}
 	}

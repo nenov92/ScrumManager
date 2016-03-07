@@ -33,6 +33,10 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 		Helper.incrementSymbolRecord("taskAssignees");
 	}
 
+	public static void unassignTask() {
+		Helper.decrementSymbolRecord("taskAssignees");
+	}
+
 	public void closeConsole() {
 		this.running = false;
 	}
