@@ -26,12 +26,32 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.hibernate.Session;
 
+/**
+ * The MIT License
+ * 
+ * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a 
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the 
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be 
+ * included in all copies or substantial portions of the Software. 
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 public class Helper {
-	public static NormCheck n;
-	public static Thread t;
-	public static Thread t1;
-	public static Thread t2;
-
+	public static NormCheck normCheckerThread;
+	public static ProductOwner productOwnerThread;
+	public static ScrumMaster scrumMasterThread;
+	
 	public static void updateSymbolRecord(String name, String value) {
 		Session session = SessionUtil.getINSTANCE();
 		GenericDaoImpl<Symbol> symbolDao = new GenericDaoImpl<Symbol>(session, Symbol.class);
@@ -78,13 +98,13 @@ public class Helper {
 	}
 
 	public static void runThreads() {
-		n = new NormCheck();
-		ProductOwner p = new ProductOwner();
-		ScrumMaster s = new ScrumMaster();
+		normCheckerThread = new NormCheck();
+		productOwnerThread = new ProductOwner();
+		scrumMasterThread = new ScrumMaster();
 
-		t = new Thread(n);
-		t1 = new Thread(p);
-		t2 = new Thread(s);
+		Thread t = new Thread(normCheckerThread);
+		Thread t1 = new Thread(productOwnerThread);
+		Thread t2 = new Thread(scrumMasterThread);
 
 		t.start();
 		t1.start();
@@ -92,7 +112,9 @@ public class Helper {
 	}
 
 	public static void stopThreads() {
-		n.terminate();
+		normCheckerThread.terminate();
+		productOwnerThread.terminate();
+		scrumMasterThread.terminate();
 	}
 
 	public static boolean isObligationActive() {
@@ -132,7 +154,7 @@ public class Helper {
 			console.getProhList().removeAllElements();
 			for (Prohibition p : NormCheck.getActiveProhibitions()) {
 				if (p.getRoleId() == role) {
-					console.getProhList().addElement(p.getPerform());
+					console.getProhList().addElement(p.getActionName());
 				}
 			}
 		} else {

@@ -7,8 +7,11 @@ public class ProductOwner extends ScrumParticipant implements Runnable {
 	private static Role role = Role.PRODUCT_OWNER;
 	private String name;
 	private InputConsole console;
+	
+	// used to control the life scope of the thread
 	private volatile boolean running = true;
 
+	// empty constructor
 	public ProductOwner() {
 	}
 
@@ -50,6 +53,11 @@ public class ProductOwner extends ScrumParticipant implements Runnable {
 		while (running) {
 			Helper.addActiveNormsToConsole(console, getRole());
 		}
+	}
+
+	// function that stops the thread from running
+	public void terminate() {
+		running = false;
 	}
 
 	@Override

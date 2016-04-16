@@ -2,6 +2,27 @@ package main.norms;
 
 import main.scrum.roles.Role;
 
+/**
+ * The MIT License
+ * 
+ * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a 
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the 
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be 
+ * included in all copies or substantial portions of the Software. 
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 public class Obligation {
 
 	private int id;
@@ -12,6 +33,7 @@ public class Obligation {
 	private String fulfilledCondition;
 	private String notFulfilledCondition;
 
+	// empty constructor 
 	public Obligation() {
 	}
 
@@ -26,6 +48,10 @@ public class Obligation {
 		this.notFulfilledCondition = notFulfilledCondition;
 	}
 
+	/**
+	 * default getters and setters below 
+	 */
+	
 	public int getId() {
 		return id;
 	}
@@ -82,6 +108,9 @@ public class Obligation {
 		this.notFulfilledCondition = notFulfilledCondition;
 	}
 
+	/** 
+	 * default object equals function overridden 
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (o != null && o instanceof Obligation) {
@@ -94,6 +123,10 @@ public class Obligation {
 		return false;
 	}
 
+	/** 
+	 * default hashCode function overridden
+	 * uniqueness guaranteed by using a combination of a prime number and unique id   
+	 */
 	@Override
 	public int hashCode() {
 		final int PRIME = 31;
@@ -101,6 +134,9 @@ public class Obligation {
 		return result;
 	}
 
+	/** 
+	 * default toString function overridden
+	 */
 	@Override
 	public String toString() {
 		return "Obligation [id: " + id + ", roleId: " + roleId + ", actionFunction: " + actionFunction + ", activationCondition: " + activationCondition + ", expriationCondition: " + expirationCondition + ", fulfilledResult: " + fulfilledCondition + ", notFulfilledResult: " + notFulfilledCondition + "]";

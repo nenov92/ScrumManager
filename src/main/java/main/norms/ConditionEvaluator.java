@@ -13,9 +13,37 @@ import main.database.Symbol;
 
 import org.hibernate.Session;
 
+/**
+ * The MIT License
+ * 
+ * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a 
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation 
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ * and/or sell copies of the Software, and to permit persons to whom the 
+ * Software is furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be 
+ * included in all copies or substantial portions of the Software. 
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+ * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
+ * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 public class ConditionEvaluator {
 
+	/**
+	 * @param conditions
+	 * @return the same string of conditions, but instead the names of the parameters
+	 * 		   are substituted with their real values taken from the database
+	 */
 	public static String processConditions(String conditions) {
+		
+		// mechanism to assure that only a valid conditions string will be processed 
 		if (conditions == null || conditions.equals("")) {
 			return null;
 		}
@@ -38,17 +66,23 @@ public class ConditionEvaluator {
 			Symbol s = symbolDao.findBySymbolName(variable);
 			SessionUtil.commitTransaction();
 
+			// substitute the variable name with a real value
 			conditions = conditions.replaceFirst(variable, s.getCurrentValue());
 		}
 
 		return conditions;
 	}
 
-	// use JavaScript engine to evaluate the string expression
+	/**
+	 * @param expression
+	 * @return boolean; use JavaScript engine to evaluate the string expression 
+	 */
 	public static Boolean evaluate(String expression) {
+		// mechanism to assure that only a valid expression string will be processed 
 		if (expression == null || expression.equals("")) {
 			return null;
 		}
+		
 		try {
 			ScriptEngineManager sem = new ScriptEngineManager();
 			ScriptEngine scriptEngine = sem.getEngineByName("JavaScript");
