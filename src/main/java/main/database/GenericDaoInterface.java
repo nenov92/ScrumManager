@@ -29,7 +29,7 @@ public interface GenericDaoInterface<T> {
 
 	public void delete(T object);
 
-	public T findBySymbolName(String name);
+	public T findByBlackboardEntryName(String name);
 
-	public List<T> findBySymbolNameRegex(String regex);
+	public List<T> findByBlackboardEntryNameRegex(String regex);
 }

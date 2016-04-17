@@ -68,14 +68,14 @@ public class GenericDaoImpl<T> implements GenericDaoInterface<T> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T findBySymbolName(String name) {
+	public T findByBlackboardEntryName(String name) {
 		Criteria criteria = getCurrentSession().createCriteria(this.entityClass).add(Restrictions.eq("name", name));
 		return (T) criteria.uniqueResult();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> findBySymbolNameRegex(String regex) {
+	public List<T> findByBlackboardEntryNameRegex(String regex) {
 		Criteria criteria = getCurrentSession().createCriteria(this.entityClass).add(Restrictions.like("name", regex));
 		return criteria.list();
 	}

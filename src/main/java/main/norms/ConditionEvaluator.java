@@ -9,7 +9,7 @@ import javax.script.ScriptException;
 
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
-import main.database.Symbol;
+import main.database.BlackboardEntry;
 
 import org.hibernate.Session;
 
@@ -61,9 +61,9 @@ public class ConditionEvaluator {
 		// for every variable name retrieve its value from the database and substitute the name with the actual value in the processed string
 		for (String variable : variables) {
 			Session session = SessionUtil.getINSTANCE();
-			GenericDaoImpl<Symbol> symbolDao = new GenericDaoImpl<Symbol>(session, Symbol.class);
+			GenericDaoImpl<BlackboardEntry> symbolDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
 			SessionUtil.beginTransaction();
-			Symbol s = symbolDao.findBySymbolName(variable);
+			BlackboardEntry s = symbolDao.findByBlackboardEntryName(variable);
 			SessionUtil.commitTransaction();
 
 			// substitute the variable name with a real value

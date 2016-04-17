@@ -31,8 +31,8 @@ import javax.persistence.UniqueConstraint;
  */
 
 @Entity
-@Table(name = "symbol", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
-public class Symbol {
+@Table(name = "blackboard", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
+public class BlackboardEntry {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,10 +48,10 @@ public class Symbol {
 	@Column(name = "current_value")
 	private String currentValue;
 
-	public Symbol() {
+	public BlackboardEntry() {
 	}
 
-	public Symbol(String name, String type, String currentValue) {
+	public BlackboardEntry(String name, String type, String currentValue) {
 		this.name = name;
 		this.type = type;
 		this.currentValue = currentValue;

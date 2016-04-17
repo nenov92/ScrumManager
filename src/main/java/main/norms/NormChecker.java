@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import main.Constants;
 import main.Helper;
 import main.scrum.roles.Role;
 
@@ -28,7 +29,7 @@ import main.scrum.roles.Role;
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class NormCheck implements Runnable {
+public class NormChecker implements Runnable {
 
 	private static Set<Obligation> activeObligations;
 	private static Set<Prohibition> activeProhibitions;
@@ -36,10 +37,18 @@ public class NormCheck implements Runnable {
 	// used to control the life scope of the thread
 	private volatile boolean running = true;
 
+	private String fileLocation = Constants.NORMS_FILE_ON_SERVER;
+	
 	// empty constructor
-	public NormCheck() {
+	public NormChecker() {
 	}
 
+	// when created the constructor gets the file location of norms
+	// the constructor mainly used for unit testing of this class 
+	public NormChecker(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
+	
 	@Override
 	public void run() {
 		System.out.println("Norm Check engine is running");
@@ -49,7 +58,7 @@ public class NormCheck implements Runnable {
 
 		// get obligations and prohibitions stored in the norms.conf file and
 		// add them in a new Norm object
-		Norm norm = Helper.loadNorms();
+		Norm norm = Helper.loadNorms(fileLocation);
 
 		// until the tread is not suspended, dynamically assign obligations and prohibitions
 		// after a constant time check if the obligations have been achieved
@@ -63,7 +72,7 @@ public class NormCheck implements Runnable {
 				e.printStackTrace();
 			}
 			
-			checkObligations(norm);
+			checkObligations();
 		}
 	}
 	
@@ -72,6 +81,10 @@ public class NormCheck implements Runnable {
 		running = false;
 	}
 
+	/**
+	 * default getters and setters below 
+	 */
+	
 	public static Set<Obligation> getActiveObligations() {
 		return activeObligations;
 	}
@@ -108,7 +121,7 @@ public class NormCheck implements Runnable {
 			// then activate this obligation
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
 					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpirationCondition())) && 
-					!getActiveObligations().contains(obligation) && !isActionProhibited(obligation.getRoleId(), obligation.getActionFunction())) {
+					!getActiveObligations().contains(obligation) && !isActionProhibited(obligation.getRoleId(), obligation.getActionFunction(), getActiveProhibitions())) {
 
 				System.out.println("Obligation activated: " + obligation.getRoleId() + " has to perform action " + obligation.getActionFunction());
 				addActiveObligation(obligation);
@@ -117,7 +130,7 @@ public class NormCheck implements Runnable {
 	}
 
 	/**
-	 * @param norm
+	 * @param norm: norm holding prohibitions
 	 */
 	private static void activateProhibitions(Norm norm) {
 		// for each prohibition parsed in the norm file
@@ -129,27 +142,26 @@ public class NormCheck implements Runnable {
 				System.out.println("Prohibition activated: " + prohibition.getRoleId() + " is prohibited to perform " + prohibition.getActionName());
 				addActiveProhibition(prohibition);
 				// if activation condition is FALSE and expiration condition is TRUE  and the prohibition is part of the set of active prohibitions, then deactivate this prohibition	
-			} else if ((ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) == false ||
-					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition()))) && getActiveProhibitions().contains(prohibition)) {
+			} else if (getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) == false ||
+					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition())))) {
 				deleteActiveProhibition(prohibition);
 			}
 		}
 	}
 
 	/**
-	 * @param norm
+	 * this method is used to check if active obligations have been fulfilled; periodically run at a given time quantum   
 	 */
-	private static void checkObligations(Norm norm) {
+	private static void checkObligations() {
 		Obligation obligation;
 		// iterate through all active obligations and check if it has been fulfilled  
 		Iterator<Obligation> iterator = getActiveObligations().iterator();
-		// for (Obligation obligation : getActiveObligations()) {
 		while(iterator.hasNext()){
 			obligation = iterator.next();
 			// if it has been fulfilled, then deactivate it, otherwise inform that it is still active
 			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getFulfilledCondition()))) {
 				System.out.println("Obligation for " + obligation.getRoleId() + " to perform action " + obligation.getActionFunction() + " has been fulfilled");
-				//deleteActiveObligation(obligation);
+
 				iterator.remove(); // solves concurrent modification exception
 			} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledCondition()))) {
 				System.out.println("Obligation for " + obligation.getRoleId() + " to perform action " + obligation.getActionFunction() + " has NOT been fulfilled");
@@ -158,31 +170,20 @@ public class NormCheck implements Runnable {
 	}
 	
 	/**
-	 * @param role
-	 * @param actionName
-	 * @return boolean; true if there is a prohibition for a role to perform this action, false otherwise  
+	 * @param role: the role of Scrum Participant; PRODUCT_OWNER, SCRUM_MASTER, DEV_TEAM 
+	 * @param actionName: the name of the action, taken from a specified obligation
+	 * @param prohibitions: the set of activated prohibitions
+	 * @return boolean; true if there is a prohibition for a role to perform this action, false otherwise
+	 * 
+	 * Used to control precedence between deontic modalities; defined as public because it needs to be unit tested
 	 */
-	private static boolean isActionProhibited(Role role, String actionName) {
-		for (Prohibition prohibition : getActiveProhibitions()) {
+	public static boolean isActionProhibited(Role role, String actionName, Set<Prohibition> prohibitions) {
+		for (Prohibition prohibition : prohibitions) {
 			if (prohibition.getRoleId() == role && prohibition.getActionName().equals(actionName)) {
 				return true;
 			}
 		}
 		return false;
-	}
-
-	// TODO: delete
-	public static Norm loadNorms() {
-		Obligation obligation = new Obligation(1, Role.PRODUCT_OWNER, "startSprint", "checkRequirements == true && activeSprint == false && productTimeFrame > 0", "checkRequirements == false", "groomingSession == true && activeSprint == true && checkRequirements == false", "groomingSession == false");
-		Obligation obligation1 = new Obligation(2, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 0 && planningSession == true", "planningSession == false", "task1Assignees > 0", "task1Assignees == 0");
-		Prohibition prohibition = new Prohibition(1, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false");
-
-		Norm norm = new Norm();
-		norm.addObligation(obligation1);
-		norm.addObligation(obligation);
-		norm.addProhibition(prohibition);
-
-		return norm;
 	}
 
 }

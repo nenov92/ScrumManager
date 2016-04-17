@@ -7,10 +7,10 @@ import java.io.InputStream;
 
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
-import main.database.Symbol;
+import main.database.BlackboardEntry;
 import main.gui.InputConsole;
 import main.norms.Norm;
-import main.norms.NormCheck;
+import main.norms.NormChecker;
 import main.norms.Obligation;
 import main.norms.Prohibition;
 import main.parser.NormLexer;
@@ -48,57 +48,76 @@ import org.hibernate.Session;
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 public class Helper {
-	public static NormCheck normCheckerThread;
+	public static NormChecker normCheckerThread;
 	public static ProductOwner productOwnerThread;
 	public static ScrumMaster scrumMasterThread;
 	
-	public static void updateSymbolRecord(String name, String value) {
+	/**
+	 * @param name: BlackboardEntry name
+	 * @param value: new value that will replace the old one
+	 * 
+	 * This method updates entries in the database
+	 */
+	public static void updateBlackboardEntryRecord(String name, String value) {
 		Session session = SessionUtil.getINSTANCE();
-		GenericDaoImpl<Symbol> symbolDao = new GenericDaoImpl<Symbol>(session, Symbol.class);
+		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
 		SessionUtil.beginTransaction();
-		Symbol symbol = symbolDao.findBySymbolName(name);
-		if (symbol != null) {
-			symbol.setCurrentValue(value);
-			symbolDao.createOrUpdate(symbol);
+		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName(name);
+		if (blackboardEntry != null) {
+			blackboardEntry.setCurrentValue(value);
+			blackboardEntryDao.createOrUpdate(blackboardEntry);
 		}
 		SessionUtil.commitTransaction();
 	}
 
-	public static void incrementSymbolRecord(String name) {
+	/**
+	 * @param name: BlackboardEntry name, used to retrieve an entry of int type and increment its current value by 1 
+	 */
+	public static void incrementBlackboardEntryRecord(String name) {
 		Session session = SessionUtil.getINSTANCE();
-		GenericDaoImpl<Symbol> symbolDao = new GenericDaoImpl<Symbol>(session, Symbol.class);
+		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
 		SessionUtil.beginTransaction();
-		Symbol symbol = symbolDao.findBySymbolName(name);
-		if (symbol != null) {
-			symbol.setCurrentValue("" + (Integer.parseInt(symbol.getCurrentValue()) + 1));
-			symbolDao.createOrUpdate(symbol);
+		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName(name);
+		if (blackboardEntry != null) {
+			blackboardEntry.setCurrentValue("" + (Integer.parseInt(blackboardEntry.getCurrentValue()) + 1));
+			blackboardEntryDao.createOrUpdate(blackboardEntry);
 		}
 		SessionUtil.commitTransaction();
 	}
 
-	public static void decrementSymbolRecord(String name) {
+	/**
+	 * @param name: BlackboardEntry name, used to retrieve an entry of int type and decrement its current value by 1 
+	 */
+	public static void decrementBlackboardEntryRecord(String name) {
 		Session session = SessionUtil.getINSTANCE();
-		GenericDaoImpl<Symbol> symbolDao = new GenericDaoImpl<Symbol>(session, Symbol.class);
+		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
 		SessionUtil.beginTransaction();
-		Symbol symbol = symbolDao.findBySymbolName(name);
-		if (symbol != null) {
-			symbol.setCurrentValue("" + (Integer.parseInt(symbol.getCurrentValue()) - 1));
-			symbolDao.createOrUpdate(symbol);
+		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName(name);
+		if (blackboardEntry != null) {
+			blackboardEntry.setCurrentValue("" + (Integer.parseInt(blackboardEntry.getCurrentValue()) - 1));
+			blackboardEntryDao.createOrUpdate(blackboardEntry);
 		}
 		SessionUtil.commitTransaction();
 	}
 
+	/**
+	 * This method returns the original database state; used either before or after the program is run  
+	 */
 	public static void refreshDatabase() {
-		Helper.updateSymbolRecord("groomingSession", "false");
-		Helper.updateSymbolRecord("activeSprint", "false");
-		Helper.updateSymbolRecord("checkRequirements", "true");
-		// Helper.updateSymbolRecord("task1Assignees", "0");
-		Helper.updateSymbolRecord("taskAssignees", "0");
-		Helper.updateSymbolRecord("planningSession", "true");
+		Helper.updateBlackboardEntryRecord("groomingSession", "false");
+		Helper.updateBlackboardEntryRecord("activeSprint", "false");
+		Helper.updateBlackboardEntryRecord("checkRequirements", "true");
+		// Helper.updateBlackboardEntryRecord("task1Assignees", "0");
+		Helper.updateBlackboardEntryRecord("taskAssignees", "0");
+		Helper.updateBlackboardEntryRecord("planningSession", "true");
 	}
 
+	
+	/**
+	 * Starts a single thread for each user type and another thread for the norm checker 
+	 */
 	public static void runThreads() {
-		normCheckerThread = new NormCheck();
+		normCheckerThread = new NormChecker();
 		productOwnerThread = new ProductOwner();
 		scrumMasterThread = new ScrumMaster();
 
@@ -111,26 +130,48 @@ public class Helper {
 		t2.start();
 	}
 
+	
+	/**
+	 * As any previous mechanisms to suspend a thread are deprecated in Java 1.8
+	 * internal logic in objects that implement Runnable is the only way to stop the thread's run method from execution 
+	 */
 	public static void stopThreads() {
 		normCheckerThread.terminate();
 		productOwnerThread.terminate();
 		scrumMasterThread.terminate();
 	}
 
+	
+	/**
+	 * @return boolean
+	 * This method checks for any active obligations
+	 */
 	public static boolean isObligationActive() {
-		if (NormCheck.getActiveObligations().size() > 0) {
+		if (NormChecker.getActiveObligations().size() > 0) {
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * @return boolean
+	 * This method checks for any active prohibitions
+	 */
 	public static boolean isProhibitionActive() {
-		if (NormCheck.getActiveProhibitions().size() > 0) {
+		if (NormChecker.getActiveProhibitions().size() > 0) {
 			return true;
 		}
 		return false;
 	}
 
+	
+	/**
+	 * @param console: the console belonging to a Scrum participant
+	 * @param role: the role of the Scrum participant
+	 * 
+	 * This method checks for any active norms for the given participant and adds them
+	 * the the user console
+	 */
 	public static void addActiveNormsToConsole(InputConsole console, Role role) {
 		try {
 			Thread.sleep(1000);
@@ -139,7 +180,7 @@ public class Helper {
 		}
 		if (isObligationActive()) {
 			console.getObList().removeAllElements();
-			for (Obligation o : NormCheck.getActiveObligations()) {
+			for (Obligation o : NormChecker.getActiveObligations()) {
 				if (o.getRoleId() == role) {
 					console.getObList().addElement(o.getActionFunction());
 				}
@@ -152,7 +193,7 @@ public class Helper {
 
 		if (isProhibitionActive()) {
 			console.getProhList().removeAllElements();
-			for (Prohibition p : NormCheck.getActiveProhibitions()) {
+			for (Prohibition p : NormChecker.getActiveProhibitions()) {
 				if (p.getRoleId() == role) {
 					console.getProhList().addElement(p.getActionName());
 				}
@@ -164,27 +205,43 @@ public class Helper {
 		}
 	}
 
-	public static Norm loadNorms() {
+	/**
+	 * @param file: String with the location of norms.conf file in the OS 
+	 * @return norm object with loaded sets of obligations and prohibitions
+	 * 
+	 * This method utilises the functionality provided by the ANTLR 4 parser
+	 * 
+	 */
+	public static Norm loadNorms(String file) {
 		InputStream is = System.in;
 		try {
-			is = new FileInputStream(Constants.NORMS_FILE_ON_SERVER);
+			is = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 
 		ANTLRInputStream input = null;
 		try {
+			// create a CharStream that reads from input
 			input = new ANTLRInputStream(is);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
+		// create a lexer that uses of input CharStream 
 		NormLexer lexer = new NormLexer(input);
+
+		// create a buffer of tokens pulled from the lexer 
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		
+		// create a parser that uses the tokens buffer
 		NormParser parser = new NormParser(tokens);
+		
 		ParseTree tree = parser.prog();
 		ParseTreeWalker parseTreeWalker = new ParseTreeWalker();
 		NormWalker normWalker = new NormWalker();
+		
+		// walk through the tree of parsed norms 
 		parseTreeWalker.walk(normWalker, tree);
 
 		System.out.println("ANTLR parser has loaded norms");

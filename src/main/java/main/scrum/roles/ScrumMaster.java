@@ -55,12 +55,20 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 		this.name = name;
 	}
 
+	public InputConsole getConsole() {
+		return console;
+	}
+
+	public void setConsole(InputConsole console) {
+		this.console = console;
+	}
+
 	public static void assignTask() {
-		Helper.incrementSymbolRecord("taskAssignees");
+		Helper.incrementBlackboardEntryRecord("taskAssignees");
 	}
 
 	public static void unassignTask() {
-		Helper.decrementSymbolRecord("taskAssignees");
+		Helper.decrementBlackboardEntryRecord("taskAssignees");
 	}
 
 	public void closeConsole() {

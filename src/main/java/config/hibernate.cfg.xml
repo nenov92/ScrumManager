@@ -35,7 +35,7 @@
 			contextual LOB creation as createClob() method threw error : java.lang.reflect.InvocationTargetException -->
 		<property name="hibernate.temp.use_jdbc_metadata_defaults">false</property>
 
-		<mapping class="main.database.Symbol" />
+		<mapping class="main.database.BlackboardEntry" />
 
 	</session-factory>
 
