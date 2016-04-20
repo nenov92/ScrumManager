@@ -8,7 +8,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 public class GroomingSession implements JavaDelegate {
-	// private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
 
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("Event entered: Grooming Session");
@@ -16,6 +15,12 @@ public class GroomingSession implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(250, 250);
 
-		Thread.sleep(Constants.SLEEP_TIME);
+		main.Helper.updateBlackboardEntryRecord("groomingSession", "true");
+		
+		Thread.sleep(Constants.SLEEP_MED);
+		
+		while (main.Helper.isObligationActive()) {
+			Thread.sleep(Constants.SLEEP_MED);
+		}
 	}
 }

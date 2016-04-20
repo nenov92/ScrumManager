@@ -25,6 +25,8 @@ package main;
 public class Constants {
 	public static int TIME = 0;
 	public static final int SLEEP_TIME = 2500;
+	public static final int SLEEP_MED = 5000;
+	public static final int SLEEP_MED_LOW = 4800;
 	
 	// Workaround to locate files when residing on server
 	private static String locationOnServer = Constants.class.getProtectionDomain().getCodeSource().getLocation().getFile().toString();

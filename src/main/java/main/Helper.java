@@ -16,6 +16,7 @@ import main.norms.Prohibition;
 import main.parser.NormLexer;
 import main.parser.NormParser;
 import main.parser.NormWalker;
+import main.scrum.roles.DevelopmentTeam;
 import main.scrum.roles.ProductOwner;
 import main.scrum.roles.Role;
 import main.scrum.roles.ScrumMaster;
@@ -51,6 +52,7 @@ public class Helper {
 	public static NormChecker normCheckerThread;
 	public static ProductOwner productOwnerThread;
 	public static ScrumMaster scrumMasterThread;
+	public static DevelopmentTeam devTeamThread;
 	
 	/**
 	 * @param name: BlackboardEntry name
@@ -105,11 +107,23 @@ public class Helper {
 	 */
 	public static void refreshDatabase() {
 		Helper.updateBlackboardEntryRecord("groomingSession", "false");
-		Helper.updateBlackboardEntryRecord("activeSprint", "false");
-		Helper.updateBlackboardEntryRecord("checkRequirements", "true");
-		// Helper.updateBlackboardEntryRecord("task1Assignees", "0");
-		Helper.updateBlackboardEntryRecord("taskAssignees", "0");
-		Helper.updateBlackboardEntryRecord("planningSession", "true");
+		Helper.updateBlackboardEntryRecord("activeSprint", "true");
+		Helper.updateBlackboardEntryRecord("checkRequirements", "false");
+		Helper.updateBlackboardEntryRecord("planningSession", "false");
+
+		Helper.updateBlackboardEntryRecord("scrumStart", "true");
+		Helper.updateBlackboardEntryRecord("dodCompleted", "false");
+		Helper.updateBlackboardEntryRecord("sprintLength", "false");
+		Helper.updateBlackboardEntryRecord("planningSplit", "false");
+		Helper.updateBlackboardEntryRecord("taskMetric", "false");
+		
+		Helper.updateBlackboardEntryRecord("backlog", "false");
+		Helper.updateBlackboardEntryRecord("backlogSorted", "false");
+		Helper.updateBlackboardEntryRecord("clarificationsAsked", "false");
+		Helper.updateBlackboardEntryRecord("clarificationsGiven", "false");
+		
+		Helper.updateBlackboardEntryRecord("taskEstimation", "false");
+		Helper.updateBlackboardEntryRecord("estimationChanged", "false");
 	}
 
 	
@@ -120,14 +134,51 @@ public class Helper {
 		normCheckerThread = new NormChecker();
 		productOwnerThread = new ProductOwner();
 		scrumMasterThread = new ScrumMaster();
+		devTeamThread = new DevelopmentTeam();
 
 		Thread t = new Thread(normCheckerThread);
 		Thread t1 = new Thread(productOwnerThread);
 		Thread t2 = new Thread(scrumMasterThread);
+		Thread t3 = new Thread(devTeamThread);
+//		Thread t4 = new Thread(devTeamThread);
+//		Thread t5 = new Thread(devTeamThread);
+//		Thread t6 = new Thread(devTeamThread);
+//		Thread t7 = new Thread(devTeamThread);
+//		Thread t8 = new Thread(devTeamThread);
+//		Thread t9 = new Thread(devTeamThread);
+//		Thread t10 = new Thread(devTeamThread);
+//		Thread t11 = new Thread(devTeamThread);
+//		Thread t12 = new Thread(devTeamThread);
+//		Thread t13 = new Thread(devTeamThread);
+//		Thread t14 = new Thread(devTeamThread);
+//		Thread t15 = new Thread(devTeamThread);
+//		Thread t16 = new Thread(devTeamThread);
+//		Thread t17 = new Thread(devTeamThread);
+//		Thread t18 = new Thread(devTeamThread);
+//		Thread t19 = new Thread(devTeamThread);
+//		Thread t20 = new Thread(devTeamThread);
 
 		t.start();
 		t1.start();
 		t2.start();
+		t3.start();
+//		t4.start();
+//		t5.start();
+//		t6.start();
+//		t7.start();
+//		t8.start();
+//		t9.start();
+//		t10.start();
+//		t11.start();
+//		t12.start();
+//		t13.start();
+//		t14.start();
+//		t15.start();
+//		t16.start();
+//		t17.start();
+//		t18.start();
+//		t19.start();
+//		t20.start();
 	}
 
 	
@@ -139,6 +190,7 @@ public class Helper {
 		normCheckerThread.terminate();
 		productOwnerThread.terminate();
 		scrumMasterThread.terminate();
+		devTeamThread.terminate();
 	}
 
 	

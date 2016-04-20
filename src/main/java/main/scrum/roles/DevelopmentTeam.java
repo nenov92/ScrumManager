@@ -26,33 +26,20 @@ import main.gui.InputConsole;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-public class ScrumMaster extends ScrumParticipant implements Runnable {
-	private static Role role = Role.SCRUM_MASTER;
-	private String name;
+public class DevelopmentTeam extends ScrumParticipant implements Runnable {
+	private static Role role = Role.DEV_TEAM;
 	private InputConsole console;
-
+	
 	// used to control the life scope of the thread
 	private volatile boolean running = true;
 
 	// empty constructor
-	public ScrumMaster() {
-	}
-
-	public ScrumMaster(String name) {
+	public DevelopmentTeam() {
 		super(role);
-		this.setName(name);
 	}
 
 	public Role getRole() {
 		return role;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public InputConsole getConsole() {
@@ -63,47 +50,28 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 		this.console = console;
 	}
 
-	public static void defineWhenTaskIsDone() {
-		System.out.println("Scrum Master: Setting Definition of Done for tasks");
-
-		Helper.updateBlackboardEntryRecord("dodCompleted", "true");
-	}
-
-	public static void setSprintLength() {
-		System.out.println("Scrum Master: Setting Length Of Sprints");
-
-		Helper.updateBlackboardEntryRecord("sprintLength", "true");
-	}
-
-	public static void splitGroomingAndPlanning() {
-		System.out.println("Scrum Master: Splitting Grooming From Planning");
-
-		Helper.updateBlackboardEntryRecord("planningSplit", "true");
-	}
-
-	public static void setTaskMetric() {
-		System.out.println("Scrum Master: Setting Task Metric");
-
-		Helper.updateBlackboardEntryRecord("taskMetric", "true");
-	}
-
-	public void startSprint() {
-		System.out.println("Scrum Master: Starting Sprint");
-
-		Helper.updateBlackboardEntryRecord("activeSprint", "true");
-		Helper.updateBlackboardEntryRecord("checkRequirements", "false");
-	}
-
 	public void closeConsole() {
 		this.running = false;
+	}
+	
+	public static void askForClarifications() {
+		System.out.println("Development Team: Asking for Clarifications");
+
+		Helper.updateBlackboardEntryRecord("clarificationsAsked", "true");
+	}
+	
+	public static void giveTaskEstimation() {
+		System.out.println("Development Team: Asking for Clarifications");
+
+		Helper.updateBlackboardEntryRecord("taskEstimation", "true");
 	}
 
 	@Override
 	public void run() {
-		console = new InputConsole("Scrum Master Terminal", new ScrumMaster("Jack"));
+		console = new InputConsole("Development Team Terminal", new DevelopmentTeam());
 		console.setVisible(running);
 
-		System.out.println("Scrum Master joining workflow");
+		System.out.println("Development Team joining workflow");
 		while (running) {
 			Helper.addActiveNormsToConsole(console, getRole());
 		}
@@ -117,11 +85,8 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Name: ");
-		sb.append(getName());
 		sb.append("; Role: ");
 		sb.append(getRole());
 		return sb.toString();
 	}
-
 }

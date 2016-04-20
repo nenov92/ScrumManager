@@ -4,7 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import main.Helper;
 import main.norms.NormChecker;
-import main.scrum.roles.ProductOwner;
+import main.scrum.roles.ScrumMaster;
 
 import org.junit.Test;
 
@@ -44,31 +44,31 @@ public class ScrumRolesTests {
 
 		// start a new thread running the normChecker
 		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
-		ProductOwner productOwner = new ProductOwner("Sam");
+		ScrumMaster scrumMaster = new ScrumMaster("Sam");
 
 		Thread thread = new Thread(normChecker);
-		Thread thread1 = new Thread(productOwner);
+		Thread thread1 = new Thread(scrumMaster);
 		thread.start();
 		thread1.start();
 
 		Thread.sleep(7000);
 
 		// this is a known obligation of the product owner, test if the user console displays this obligation
-		boolean obligBool = productOwner.getConsole().getObList().contains("startSprint");
+		boolean obligBool = scrumMaster.getConsole().getObList().contains("startSprint");
 		assertTrue("Activation of prohibitions is not correct", obligBool);
 
-		productOwner.startSprint();
+		scrumMaster.startSprint();
 
 		Thread.sleep(7000);
 
 		// after the action is performed by the product owner, the console of
 		// this user should no more display it as active obligation
-		obligBool = productOwner.getConsole().getObList().contains("startSprint");
+		obligBool = scrumMaster.getConsole().getObList().contains("startSprint");
 		assertFalse("Activation of prohibitions is not correct", obligBool);
 
 		// terminate both threads
 		normChecker.terminate();
-		productOwner.terminate();
+		scrumMaster.terminate();
 		
 		// return the database to its previous state
 		Helper.refreshDatabase();

@@ -6,9 +6,9 @@ norm: obligation
 	| prohibition
 	;
 	
-obligation: 'obligation' LPAREN INTEGER ',' ROLE ',' NAME ',' activationCondition ',' expirationCondition ',' fulfilledCondition ',' notFulfilledCondition RPAREN;
+obligation: 'norm' LPAREN INTEGER ',' 'obligation' ',' ROLE ',' NAME ',' activationCondition ',' expirationCondition ',' fulfilledCondition ',' notFulfilledCondition RPAREN;
 
-prohibition: 'prohibition' LPAREN INTEGER ',' ROLE ',' NAME ',' activationCondition ',' expirationCondition RPAREN;
+prohibition: 'norm' LPAREN INTEGER ',' 'prohibition' ',' ROLE ',' NAME ',' activationCondition ',' expirationCondition RPAREN;
 
 activationCondition: tuple (LOGICAL_OPERATOR tuple)*;
 
@@ -31,7 +31,7 @@ RPAREN: ')';
 INTEGER: [0-9]+;
 ROLE: 'PRODUCT_OWNER'
 	| 'SCRUM_MASTER'
-	| 'DEVELOPER'
+	| 'DEV_TEAM'
 	;
 NAME: [a-zA-Z]+;
 LOGICAL_OPERATOR: '&&' | '||';

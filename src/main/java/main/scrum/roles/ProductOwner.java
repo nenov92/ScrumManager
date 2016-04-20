@@ -63,14 +63,36 @@ public class ProductOwner extends ScrumParticipant implements Runnable {
 		this.console = console;
 	}
 
-	public void startSprint() {
-		System.out.println("ProductOwner: Starting Sprint");
+	public static void prepareBacklog() {
+		System.out.println("Product Owner: Preparing Backlog");
 
-		Helper.updateBlackboardEntryRecord("groomingSession", "true");
-		Helper.updateBlackboardEntryRecord("activeSprint", "true");
-		Helper.updateBlackboardEntryRecord("checkRequirements", "false");
+		Helper.updateBlackboardEntryRecord("backlog", "true");
 	}
+	
+	public static void sortBacklog() {
+		System.out.println("Product Owner: Sorting Backlog");
 
+		Helper.updateBlackboardEntryRecord("backlogSorted", "true");
+	}
+	
+	public static void giveClarifications() {
+		System.out.println("Product Owner: Giving Clarifications");
+
+		Helper.updateBlackboardEntryRecord("clarificationsGiven", "true");
+	}
+	
+	public static void changeTaskEstimation() {
+		System.out.println("Product Owner: Illegally Changing Task Estimations");
+
+		Helper.updateBlackboardEntryRecord("estimationChanged", "true");
+	}
+	
+	public static void removeEstimationChange() {
+		System.out.println("Product Owner: Removing Illegally Changed Task Estimations");
+
+		Helper.updateBlackboardEntryRecord("estimationChanged", "false");
+	}
+	
 	public void closeConsole() {
 		this.running = false;
 	}

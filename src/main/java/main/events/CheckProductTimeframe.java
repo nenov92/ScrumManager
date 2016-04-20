@@ -8,7 +8,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 public class CheckProductTimeframe implements JavaDelegate {
-	// private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
 
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("Event entered: Check Requirements to Start Sprint");
@@ -16,20 +15,17 @@ public class CheckProductTimeframe implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(147, 105);
 
-		Thread.sleep(Constants.SLEEP_TIME);
+		Thread.sleep(Constants.SLEEP_MED);
 
-		// check norms which apply to this event
-		// NormChecker.checkNorms();
-
+		while (main.Helper.isObligationActive()) {
+			Thread.sleep(Constants.SLEEP_MED);
+		}
+		
 		System.out.println("XOR check: More Time?");
 		gui.refreshBackground();
 		gui.drawToBackground(250, 90);
 
 		Thread.sleep(Constants.SLEEP_TIME);
-
-		while (main.Helper.isObligationActive()) {
-			Thread.sleep(5000);
-		}
 		
 		if (Constants.TIME > 1) {
 			System.out.println("XOR result: NO");

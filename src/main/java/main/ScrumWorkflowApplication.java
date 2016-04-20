@@ -51,6 +51,16 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 		Thread.sleep(Constants.SLEEP_TIME);
 
 		main.Helper.runThreads();
+		
+		Thread.sleep(Constants.SLEEP_MED);
+		
+		while (main.Helper.isObligationActive()) {
+			Thread.sleep(Constants.SLEEP_MED);
+		}
+		
+		main.Helper.updateBlackboardEntryRecord("scrumStart", "false");
+		main.Helper.updateBlackboardEntryRecord("checkRequirements", "true");
+		main.Helper.updateBlackboardEntryRecord("activeSprint", "false");
 
 		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));

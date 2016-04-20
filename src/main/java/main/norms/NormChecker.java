@@ -67,7 +67,7 @@ public class NormChecker implements Runnable {
 			activateProhibitions(norm);
 			
 			try {
-				Thread.sleep(10000);
+				Thread.sleep(Constants.SLEEP_MED_LOW);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
