@@ -28,15 +28,15 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
  * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-public class RetrospectiveMeeting implements JavaDelegate {
+public class DailyMeeting implements JavaDelegate {
 
 	public void execute(DelegateExecution execution) throws Exception {
-		System.out.println("Event entered: Retrospective Meeting");
+		System.out.println("Event entered: Daily Meeting");
 		GUI gui = Helper.getGUI();
 		gui.refreshBackground();
-		gui.drawToBackground(1025, 250);
+		gui.drawToBackground(577, 250);
 
-		main.Helper.updateBlackboardEntryRecord("retrospective", "true");
+		main.Helper.updateBlackboardEntryRecord("daily", "true");
 		
 		Thread.sleep(Constants.SLEEP_MED);
 		
@@ -44,6 +44,25 @@ public class RetrospectiveMeeting implements JavaDelegate {
 			Thread.sleep(Constants.SLEEP_MED);
 		}
 
-		main.Helper.updateBlackboardEntryRecord("retrospective", "false");
+		main.Helper.updateBlackboardEntryRecord("daily", "false");
+		main.Helper.updateBlackboardEntryRecord("statusUpdated", "false");
+		main.Helper.updateBlackboardEntryRecord("underFifteen", "false");
+		
+		System.out.println("XOR check: More Days for Implementation?");
+		gui = Helper.getGUI();
+		gui.refreshBackground();
+		gui.drawToBackground(682, 237);
+
+		Thread.sleep(Constants.SLEEP_TIME);
+
+		Constants.TIME += 1;
+		if (Constants.TIME > 1) {
+			System.out.println("XOR result: NO");
+			execution.getProcessInstance().setVariable("implement", false);
+		} else {
+			System.out.println("XOR result: YES");
+			execution.getProcessInstance().setVariable("implement", true);
+		}
+
 	}
 }

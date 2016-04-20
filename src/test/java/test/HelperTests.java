@@ -40,9 +40,6 @@ public class HelperTests {
 	 */
 	@Test
 	public void updateBlackboardEntryRecordFnUnitTest() {
-		// refresh in case any previous tests made changes in the database
-		Helper.refreshDatabase();
-		
 		Helper.updateBlackboardEntryRecord("condition", "false");
 
 		Session session = SessionUtil.getINSTANCE();
@@ -62,9 +59,6 @@ public class HelperTests {
 	 */
 	@Test
 	public void incrementBlackboardEntryRecordFnUnitTest() {
-		// refresh in case any previous tests made changes in the database
-		Helper.refreshDatabase();
-		
 		Helper.incrementBlackboardEntryRecord("condition2");
 
 		Session session = SessionUtil.getINSTANCE();
@@ -113,7 +107,7 @@ public class HelperTests {
 		assertTrue("Obligations are not loaded", norm.getObligations().size() > 0);
 		assertTrue("Prohibitions are not loaded", norm.getProhibitions().size() > 0);
 
-		Prohibition prohibition = new Prohibition(4, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false");
+		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false");
 		assertTrue("Set of prohibitions does not contain all elements", norm.getProhibitions().contains(prohibition));
 	}
 }

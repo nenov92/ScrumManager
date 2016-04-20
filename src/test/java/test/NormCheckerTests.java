@@ -12,8 +12,8 @@ import main.norms.Norm;
 import main.norms.NormChecker;
 import main.norms.Obligation;
 import main.norms.Prohibition;
+import main.scrum.roles.ProductOwner;
 import main.scrum.roles.Role;
-import main.scrum.roles.ScrumMaster;
 
 import org.junit.Test;
 
@@ -138,7 +138,7 @@ public class NormCheckerTests {
 		Thread thread = new Thread(normChecker);
 		thread.start();
 
-		Obligation obligation = new Obligation(1, Role.PRODUCT_OWNER, "startSprint", "checkRequirements == true && activeSprint == false && productTimeFrame > 0", "checkRequirements == false", "groomingSession == true && activeSprint == true && checkRequirements == false", "groomingSession == false");
+		Obligation obligation = new Obligation(1, Role.SCRUM_MASTER, "defineWhenTaskIsDone", "scrumStart == true", "scrumStart == false || dodCompleted == true", "dodCompleted == true", "dodCompleted == false");
 
 		Thread.sleep(5000);
 		boolean obligBool = normChecker.getActiveObligations().contains(obligation);
@@ -147,9 +147,6 @@ public class NormCheckerTests {
 
 		// terminate the threads
 		normChecker.terminate();
-		
-		// return the database to its previous state
-		Helper.refreshDatabase();
 	}
 	
 	/**
@@ -159,23 +156,20 @@ public class NormCheckerTests {
 	@SuppressWarnings("static-access")
 	@Test
 	public void activationOfProhibitionsTest() throws InterruptedException {
-		// refresh in case any previous tests made changes in the database
-		Helper.refreshDatabase();
-		
 		// start a new thread running the normChecker
 		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
-		ScrumMaster scrumMaster = new ScrumMaster("Sam");
+		ProductOwner productOwner = new ProductOwner("Sam");
 
 		Thread thread = new Thread(normChecker);
-		Thread thread1 = new Thread(scrumMaster);
+		Thread thread1 = new Thread(productOwner);
 		thread.start();
 		thread1.start();
 
 		// this action of the scrum master activates the prohibition defined below so that it can be tested
-		Thread.sleep(7000);
-		scrumMaster.assignTask();
+		Thread.sleep(9000);
+		main.Helper.updateBlackboardEntryRecord("planningSession", "true");
 
-		Prohibition prohibition = new Prohibition(4, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false");
+		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false");
 
 		Thread.sleep(10000);
 		boolean prohBool = normChecker.getActiveProhibitions().contains(prohibition);
@@ -184,7 +178,7 @@ public class NormCheckerTests {
 		
 		// terminate both threads
 		normChecker.terminate();
-		scrumMaster.terminate();
+		productOwner.terminate();
 		
 		// return the database to its previous state
 		Helper.refreshDatabase();

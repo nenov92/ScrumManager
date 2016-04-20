@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import main.Helper;
+import main.database.BlackboardEntry;
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
-import main.database.BlackboardEntry;
 
 import org.hibernate.Session;
 
@@ -85,7 +84,6 @@ public class ConditionEvaluator {
 		}
 		
 		try {
-			//ScriptEngineManager sem = new ScriptEngineManager();
 			ScriptEngine scriptEngine = Helper.getScriptEngineManager().getEngineByName("JavaScript");
 			return (Boolean) scriptEngine.eval(expression);
 		} catch (ScriptException e) {

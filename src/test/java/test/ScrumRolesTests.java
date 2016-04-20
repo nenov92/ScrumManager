@@ -39,9 +39,6 @@ public class ScrumRolesTests {
 	 */
 	@Test
 	public void startSprintFnUnitTest() throws InterruptedException {
-		// refresh in case any previous tests made changes in the database
-		Helper.refreshDatabase();
-
 		// start a new thread running the normChecker
 		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
 		ScrumMaster scrumMaster = new ScrumMaster("Sam");
@@ -54,8 +51,8 @@ public class ScrumRolesTests {
 		Thread.sleep(7000);
 
 		// this is a known obligation of the product owner, test if the user console displays this obligation
-		boolean obligBool = scrumMaster.getConsole().getObList().contains("startSprint");
-		assertTrue("Activation of prohibitions is not correct", obligBool);
+		boolean obligBool = scrumMaster.getConsole().getObList().contains("defineWhenTaskIsDone");
+		assertTrue("Activation of obligations is not correct", obligBool);
 
 		scrumMaster.startSprint();
 
@@ -64,7 +61,7 @@ public class ScrumRolesTests {
 		// after the action is performed by the product owner, the console of
 		// this user should no more display it as active obligation
 		obligBool = scrumMaster.getConsole().getObList().contains("startSprint");
-		assertFalse("Activation of prohibitions is not correct", obligBool);
+		assertFalse("Activation of obligations is not correct", obligBool);
 
 		// terminate both threads
 		normChecker.terminate();
