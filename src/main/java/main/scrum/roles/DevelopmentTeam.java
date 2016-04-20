@@ -61,9 +61,27 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 	}
 	
 	public static void giveTaskEstimation() {
-		System.out.println("Development Team: Asking for Clarifications");
+		System.out.println("Development Team: Giving Task Estimation");
 
 		Helper.updateBlackboardEntryRecord("taskEstimation", "true");
+	}
+
+	public static void updateStatus() {
+		System.out.println("Development Team: Giving Status Changes");
+
+		Helper.updateBlackboardEntryRecord("statusUpdated", "true");
+	}
+	
+	public static void demonstrateCompletedTasks() {
+		System.out.println("Development Team: Demonstrating Completed Tasks");
+
+		Helper.updateBlackboardEntryRecord("demo", "true");
+	}
+	
+	public static void giveFeedback() {
+		System.out.println("Development Team: Giving Feedback for the Past Sprint");
+
+		Helper.updateBlackboardEntryRecord("feedbackGiven", "true");
 	}
 
 	@Override

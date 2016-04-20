@@ -82,14 +82,21 @@ public class InputConsole extends JFrame implements DocumentListener {
 			content.add("prepareBacklog");
 			content.add("sortBacklog");
 			content.add("giveClarifications");
+			content.add("removeEstimationChange");
+			content.add("changeTaskEstimation");
 		} else if (user.getRole() == Role.SCRUM_MASTER) {
 			content.add("startSprint");
 			content.add("defineWhenTaskIsDone");
 			content.add("setSprintLength");
 			content.add("splitGroomingAndPlanning");
 			content.add("setTaskMetric");
+			content.add("keepInTime");
 		}  else if (user.getRole() == Role.DEV_TEAM) {
 			content.add("askForClarifications");
+			content.add("giveTaskEstimation");
+			content.add("updateStatus");
+			content.add("demonstrateCompletedTasks");
+			content.add("giveFeedback");
 		}
 
 		bgColour = methodField.getBackground();

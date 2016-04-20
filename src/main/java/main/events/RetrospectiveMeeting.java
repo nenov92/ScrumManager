@@ -16,7 +16,14 @@ public class RetrospectiveMeeting implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(1025, 250);
 
-		Thread.sleep(Constants.SLEEP_TIME);
+		main.Helper.updateBlackboardEntryRecord("retrospective", "true");
+		
+		Thread.sleep(Constants.SLEEP_MED);
+		
+		while (main.Helper.isObligationActive()) {
+			Thread.sleep(Constants.SLEEP_MED);
+		}
 
+		main.Helper.updateBlackboardEntryRecord("retrospective", "false");
 	}
 }

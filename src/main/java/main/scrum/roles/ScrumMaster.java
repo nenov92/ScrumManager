@@ -93,6 +93,12 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 		Helper.updateBlackboardEntryRecord("activeSprint", "true");
 		Helper.updateBlackboardEntryRecord("checkRequirements", "false");
 	}
+	
+	public void keepInTime() {
+		System.out.println("Scrum Master: Keeping Daily under fifteen minutes");
+
+		Helper.updateBlackboardEntryRecord("underFifteen", "true");
+	}
 
 	public void closeConsole() {
 		this.running = false;

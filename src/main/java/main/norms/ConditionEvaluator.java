@@ -7,6 +7,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import main.Helper;
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
 import main.database.BlackboardEntry;
@@ -84,8 +85,8 @@ public class ConditionEvaluator {
 		}
 		
 		try {
-			ScriptEngineManager sem = new ScriptEngineManager();
-			ScriptEngine scriptEngine = sem.getEngineByName("JavaScript");
+			//ScriptEngineManager sem = new ScriptEngineManager();
+			ScriptEngine scriptEngine = Helper.getScriptEngineManager().getEngineByName("JavaScript");
 			return (Boolean) scriptEngine.eval(expression);
 		} catch (ScriptException e) {
 			e.printStackTrace();

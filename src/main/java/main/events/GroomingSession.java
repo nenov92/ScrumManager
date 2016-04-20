@@ -22,5 +22,7 @@ public class GroomingSession implements JavaDelegate {
 		while (main.Helper.isObligationActive()) {
 			Thread.sleep(Constants.SLEEP_MED);
 		}
+		
+		main.Helper.updateBlackboardEntryRecord("groomingSession", "false");
 	}
 }

@@ -113,18 +113,21 @@ public class NormChecker implements Runnable {
 	 * @param norm 
 	 */
 	private static void activateObligations(Norm norm) {
-		// for each obligation parsed in the norm file
-		for (Obligation obligation : norm.getObligations()) {
-			
-			// if activation condition is TRUE and expiration condition is FALSE and this obligation is not already activated 
-			// and there is no prohibition for the role of the obligation to perform the same action
-			// then activate this obligation
-			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
-					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpirationCondition())) && 
-					!getActiveObligations().contains(obligation) && !isActionProhibited(obligation.getRoleId(), obligation.getActionFunction(), getActiveProhibitions())) {
-
-				System.out.println("Obligation activated: " + obligation.getRoleId() + " has to perform action " + obligation.getActionFunction());
-				addActiveObligation(obligation);
+		// check if norm has any obligations loaded
+		if (norm.getObligations().size() > 0) {
+			// for each obligation parsed in the norm file
+			for (Obligation obligation : norm.getObligations()) {
+				
+				// if activation condition is TRUE and expiration condition is FALSE and this obligation is not already activated 
+				// and there is no prohibition for the role of the obligation to perform the same action
+				// then activate this obligation
+				if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
+						!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpirationCondition())) && 
+						!getActiveObligations().contains(obligation) && !isActionProhibited(obligation.getRoleId(), obligation.getActionFunction(), getActiveProhibitions())) {
+					
+					System.out.println("Obligation activated: " + obligation.getRoleId() + " has to perform action " + obligation.getActionFunction());
+					addActiveObligation(obligation);
+				}
 			}
 		}
 	}

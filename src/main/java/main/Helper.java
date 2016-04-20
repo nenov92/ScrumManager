@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.script.ScriptEngineManager;
+
 import main.database.GenericDaoImpl;
 import main.database.SessionUtil;
 import main.database.BlackboardEntry;
@@ -53,6 +55,12 @@ public class Helper {
 	public static ProductOwner productOwnerThread;
 	public static ScrumMaster scrumMasterThread;
 	public static DevelopmentTeam devTeamThread;
+	
+	public static ScriptEngineManager sem = new ScriptEngineManager();
+	
+	public static ScriptEngineManager getScriptEngineManager(){
+		return sem;
+	}
 	
 	/**
 	 * @param name: BlackboardEntry name
@@ -124,6 +132,14 @@ public class Helper {
 		
 		Helper.updateBlackboardEntryRecord("taskEstimation", "false");
 		Helper.updateBlackboardEntryRecord("estimationChanged", "false");
+		
+		Helper.updateBlackboardEntryRecord("daily", "false");
+		Helper.updateBlackboardEntryRecord("review", "false");
+		Helper.updateBlackboardEntryRecord("retrospective", "false");
+		Helper.updateBlackboardEntryRecord("statusUpdated", "false");
+		Helper.updateBlackboardEntryRecord("underFifteen", "false");
+		Helper.updateBlackboardEntryRecord("demo", "false");
+		Helper.updateBlackboardEntryRecord("feedbackGiven", "false");
 	}
 
 	

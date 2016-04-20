@@ -8,7 +8,6 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
 public class ReviewMeeting implements JavaDelegate {
-	// private final static Logger LOGGER = Logger.getLogger(Constants.LOGGER);
 
 	public void execute(DelegateExecution execution) throws Exception {
 		System.out.println("Event entered: Review Meeting");
@@ -16,7 +15,14 @@ public class ReviewMeeting implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(845, 250);
 
-		Thread.sleep(Constants.SLEEP_TIME);
+		main.Helper.updateBlackboardEntryRecord("review", "true");
+		
+		Thread.sleep(Constants.SLEEP_MED);
+		
+		while (main.Helper.isObligationActive()) {
+			Thread.sleep(Constants.SLEEP_MED);
+		}
 
+		main.Helper.updateBlackboardEntryRecord("retrospective", "false");
 	}
 }
