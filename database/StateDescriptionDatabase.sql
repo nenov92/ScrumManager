@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.4.4
 -- Dumped by pg_dump version 9.4.0
--- Started on 2016-04-19 00:50:57
+-- Started on 2016-04-21 02:02:38
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -76,16 +76,34 @@ COPY blackboard (id, name, type, current_value) FROM stdin;
 3	condition3	bool	false
 4	condition4	int	10
 7	productTimeFrame	int	28
-1	condition	bool	true
-2	condition2	int	5
-11	task2Assignees	int	0
-12	task3Assignees	int	0
-13	planningSession	bool	true
-14	taskAssignees	int	1
-8	groomingSession	bool	true
 6	activeSprint	bool	true
 5	checkRequirements	bool	false
+11	task2Assignees	int	0
+12	task3Assignees	int	0
+8	groomingSession	bool	false
+13	planningSession	bool	false
+1	condition	bool	true
+2	condition2	int	5
 10	task1Assignees	int	1
+53	daily	bool	false
+14	taskAssignees	int	0
+56	statusUpdated	bool	false
+57	underFifteen	bool	false
+55	retrospective	bool	false
+41	scrumStart	bool	true
+42	dodCompleted	bool	false
+43	sprintLength	bool	false
+44	planningSplit	bool	false
+45	taskMetric	bool	false
+46	backlog	bool	false
+47	backlogSorted	bool	false
+48	clarificationsAsked	bool	false
+49	clarificationsGiven	bool	false
+51	taskEstimation	bool	false
+54	review	bool	false
+58	demo	bool	false
+59	feedbackGiven	bool	false
+52	estimationChanged	bool	false
 \.
 
 
@@ -95,7 +113,7 @@ COPY blackboard (id, name, type, current_value) FROM stdin;
 -- Name: blackboard_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('blackboard_id_seq', 30, true);
+SELECT pg_catalog.setval('blackboard_id_seq', 69, true);
 
 
 --
@@ -128,7 +146,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2016-04-19 00:50:58
+-- Completed on 2016-04-21 02:02:39
 
 --
 -- PostgreSQL database dump complete
