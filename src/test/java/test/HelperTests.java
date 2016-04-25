@@ -97,8 +97,8 @@ public class HelperTests {
 	
 	/**
 	 * Test if the ANTLR 4 parser properly gets the input from norms.conf file
-	 * location of the file is hardcoded
-	 * to use this test please change the location of the file that reflects its absolute path your system
+	 * location of the file is hardcoded; to use this test please change the location of the file 
+	 * that reflects its absolute path your system
 	 */
 	@Test
 	public void loadNormsFnUnitTest() {

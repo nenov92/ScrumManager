@@ -194,14 +194,18 @@ public class InputConsole extends JFrame implements DocumentListener {
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		checkIfMethodDefiened();
-
+		try {
+			checkIfMethodDefiened();
+		} catch (Exception e2) {
+		}
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		checkIfMethodDefiened();
-
+		try {
+			checkIfMethodDefiened();
+		} catch (Exception e2) {
+		}
 	}
 
 	@Override

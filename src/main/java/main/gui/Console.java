@@ -14,7 +14,6 @@ import javax.swing.JTextArea;
 public class Console {
 	public Console() {
 		JFrame frame = new JFrame("Scrum Workflow Simulation");
-		// frame.add(new JLabel("Output"), BorderLayout.NORTH);
 		frame.setSize(500, 600);
 
 		JMenuBar menubar = new JMenuBar();
