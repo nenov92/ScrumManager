@@ -156,45 +156,11 @@ public class Helper {
 		Thread t1 = new Thread(productOwnerThread);
 		Thread t2 = new Thread(scrumMasterThread);
 		Thread t3 = new Thread(devTeamThread);
-//		Thread t4 = new Thread(devTeamThread);
-//		Thread t5 = new Thread(devTeamThread);
-//		Thread t6 = new Thread(devTeamThread);
-//		Thread t7 = new Thread(devTeamThread);
-//		Thread t8 = new Thread(devTeamThread);
-//		Thread t9 = new Thread(devTeamThread);
-//		Thread t10 = new Thread(devTeamThread);
-//		Thread t11 = new Thread(devTeamThread);
-//		Thread t12 = new Thread(devTeamThread);
-//		Thread t13 = new Thread(devTeamThread);
-//		Thread t14 = new Thread(devTeamThread);
-//		Thread t15 = new Thread(devTeamThread);
-//		Thread t16 = new Thread(devTeamThread);
-//		Thread t17 = new Thread(devTeamThread);
-//		Thread t18 = new Thread(devTeamThread);
-//		Thread t19 = new Thread(devTeamThread);
-//		Thread t20 = new Thread(devTeamThread);
 
 		t.start();
 		t1.start();
 		t2.start();
 		t3.start();
-//		t4.start();
-//		t5.start();
-//		t6.start();
-//		t7.start();
-//		t8.start();
-//		t9.start();
-//		t10.start();
-//		t11.start();
-//		t12.start();
-//		t13.start();
-//		t14.start();
-//		t15.start();
-//		t16.start();
-//		t17.start();
-//		t18.start();
-//		t19.start();
-//		t20.start();
 	}
 
 	
@@ -311,7 +277,7 @@ public class Helper {
 		
 		// walk through the tree of parsed norms 
 		parseTreeWalker.walk(normWalker, tree);
-
+		
 		System.out.println("ANTLR parser has loaded norms");
 		return new Norm(normWalker.getObligations(), normWalker.getProhibitions());
 	}
