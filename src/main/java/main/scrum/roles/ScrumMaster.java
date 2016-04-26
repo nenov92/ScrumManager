@@ -1,6 +1,9 @@
 package main.scrum.roles;
 
+import org.hibernate.Session;
+
 import main.Helper;
+import main.database.HibernateUtil;
 import main.gui.InputConsole;
 
 /**
@@ -66,38 +69,50 @@ public class ScrumMaster extends ScrumParticipant implements Runnable {
 	public static void defineWhenTaskIsDone() {
 		System.out.println("Scrum Master: Setting Definition of Done for tasks");
 
-		Helper.updateBlackboardEntryRecord("dodCompleted", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("dodCompleted", "true", session);
+		session.close();
 	}
 
 	public static void setSprintLength() {
 		System.out.println("Scrum Master: Setting Length Of Sprints");
 
-		Helper.updateBlackboardEntryRecord("sprintLength", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("sprintLength", "true", session);
+		session.close();
 	}
 
 	public static void splitGroomingAndPlanning() {
 		System.out.println("Scrum Master: Splitting Grooming From Planning");
 
-		Helper.updateBlackboardEntryRecord("planningSplit", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("planningSplit", "true", session);
+		session.close();
 	}
 
 	public static void setTaskMetric() {
 		System.out.println("Scrum Master: Setting Task Metric");
 
-		Helper.updateBlackboardEntryRecord("taskMetric", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("taskMetric", "true", session);
+		session.close();
 	}
 
 	public void startSprint() {
 		System.out.println("Scrum Master: Starting Sprint");
 
-		Helper.updateBlackboardEntryRecord("activeSprint", "true");
-		Helper.updateBlackboardEntryRecord("checkRequirements", "false");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("activeSprint", "true", session);
+		Helper.updateBlackboardEntryRecord("checkRequirements", "false", session);
+		session.close();
 	}
 	
 	public void keepInTime() {
 		System.out.println("Scrum Master: Keeping Daily under fifteen minutes");
 
-		Helper.updateBlackboardEntryRecord("underFifteen", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("underFifteen", "true", session);
+		session.close();
 	}
 
 	public void closeConsole() {

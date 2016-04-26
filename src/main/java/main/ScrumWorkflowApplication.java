@@ -4,6 +4,7 @@ import static org.camunda.bpm.engine.variable.Variables.createVariables;
 
 import java.io.IOException;
 
+import main.database.HibernateUtil;
 import main.gui.Console;
 import main.gui.GUI;
 import main.gui.Helper;
@@ -12,6 +13,7 @@ import org.camunda.bpm.application.PostDeploy;
 import org.camunda.bpm.application.ProcessApplication;
 import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.ProcessEngine;
+import org.hibernate.Session;
 
 /**
  * The MIT License
@@ -57,11 +59,13 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 		while (main.Helper.isObligationActive()) {
 			Thread.sleep(Constants.SLEEP_MED);
 		}
-		
-		main.Helper.updateBlackboardEntryRecord("scrumStart", "false");
-		main.Helper.updateBlackboardEntryRecord("checkRequirements", "true");
-		main.Helper.updateBlackboardEntryRecord("activeSprint", "false");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		main.Helper.updateBlackboardEntryRecord("scrumStart", "false", session);
+		main.Helper.updateBlackboardEntryRecord("checkRequirements", "true", session);
+		main.Helper.updateBlackboardEntryRecord("activeSprint", "false", session);
 
+		session.close();
+		
 		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));
 	}

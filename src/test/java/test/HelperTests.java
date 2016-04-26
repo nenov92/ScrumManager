@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 import main.Helper;
 import main.database.BlackboardEntry;
 import main.database.GenericDaoImpl;
-import main.database.SessionUtil;
+import main.database.HibernateUtil;
 import main.norms.Norm;
 import main.norms.Prohibition;
 import main.scrum.roles.Role;
@@ -40,18 +40,18 @@ public class HelperTests {
 	 */
 	@Test
 	public void updateBlackboardEntryRecordFnUnitTest() {
-		Helper.updateBlackboardEntryRecord("condition", "false");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("condition", "false", session);
 
-		Session session = SessionUtil.getINSTANCE();
 		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-		SessionUtil.beginTransaction();
+		session.beginTransaction();
 		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName("condition");
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 
 		assertTrue("Blackboard entry not properly updated", blackboardEntry.getCurrentValue() == "false");
 
 		// return entry to original state
-		Helper.updateBlackboardEntryRecord("condition", "true");
+		Helper.updateBlackboardEntryRecord("condition", "true", session);
 	}
 	
 	/**
@@ -59,18 +59,20 @@ public class HelperTests {
 	 */
 	@Test
 	public void incrementBlackboardEntryRecordFnUnitTest() {
-		Helper.incrementBlackboardEntryRecord("condition2");
+		Session session = HibernateUtil.getSessionfactory().openSession();
 
-		Session session = SessionUtil.getINSTANCE();
+		Helper.incrementBlackboardEntryRecord("condition2", session);
+
 		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-		SessionUtil.beginTransaction();
+		session.beginTransaction();
 		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName("condition2");
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 
 		assertTrue("Blackboard entry not properly updated", blackboardEntry.getCurrentValue().equals("6"));
 
 		// return entry to original state
-		Helper.decrementBlackboardEntryRecord("condition2");
+		Helper.decrementBlackboardEntryRecord("condition2", session);
+		session.close();
 	}
 	
 	/**
@@ -78,21 +80,20 @@ public class HelperTests {
 	 */
 	@Test
 	public void decrementBlackboardEntryRecordFnUnitTest() {
-		// refresh in case any previous tests made changes in the database
-		Helper.refreshDatabase();
+		Session session = HibernateUtil.getSessionfactory().openSession();
 		
-		Helper.decrementBlackboardEntryRecord("condition2");
+		Helper.decrementBlackboardEntryRecord("condition2", session);
 
-		Session session = SessionUtil.getINSTANCE();
 		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-		SessionUtil.beginTransaction();
+		session.beginTransaction();
 		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName("condition2");
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 
 		assertTrue("Blackboard entry not properly updated", blackboardEntry.getCurrentValue().equals("4"));
 
 		// return entry to original state
-		Helper.incrementBlackboardEntryRecord("condition2");
+		Helper.incrementBlackboardEntryRecord("condition2", session);
+		session.close();
 	}
 	
 	/**
@@ -102,7 +103,7 @@ public class HelperTests {
 	 */
 	@Test
 	public void loadNormsFnUnitTest() {
-		Norm norm = Helper.loadNorms("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
+		Norm norm = Helper.loadNorms("F:/Dev/JavaWorkspace/ScrumManager/src/main/resources/norms.conf");
 
 		assertTrue("Obligations are not loaded", norm.getObligations().size() > 0);
 		assertTrue("Prohibitions are not loaded", norm.getProhibitions().size() > 0);

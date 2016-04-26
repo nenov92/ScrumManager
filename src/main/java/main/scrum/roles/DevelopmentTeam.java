@@ -1,6 +1,9 @@
 package main.scrum.roles;
 
+import org.hibernate.Session;
+
 import main.Helper;
+import main.database.HibernateUtil;
 import main.gui.InputConsole;
 
 /**
@@ -57,31 +60,41 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 	public static void askForClarifications() {
 		System.out.println("Development Team: Asking for Clarifications");
 
-		Helper.updateBlackboardEntryRecord("clarificationsAsked", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("clarificationsAsked", "true", session);
+		session.close();
 	}
 	
 	public static void giveTaskEstimation() {
 		System.out.println("Development Team: Giving Task Estimation");
 
-		Helper.updateBlackboardEntryRecord("taskEstimation", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("taskEstimation", "true", session);
+		session.close();
 	}
 
 	public static void updateStatus() {
 		System.out.println("Development Team: Giving Status Changes");
 
-		Helper.updateBlackboardEntryRecord("statusUpdated", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("statusUpdated", "true", session);
+		session.close();
 	}
 	
 	public static void demonstrateCompletedTasks() {
 		System.out.println("Development Team: Demonstrating Completed Tasks");
 
-		Helper.updateBlackboardEntryRecord("demo", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("demo", "true", session);
+		session.close();
 	}
 	
 	public static void giveFeedback() {
 		System.out.println("Development Team: Giving Feedback for the Past Sprint");
 
-		Helper.updateBlackboardEntryRecord("feedbackGiven", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("feedbackGiven", "true", session);
+		session.close();
 	}
 
 	@Override

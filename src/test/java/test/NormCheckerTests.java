@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import main.Helper;
+import main.database.HibernateUtil;
 import main.norms.ConditionEvaluator;
 import main.norms.Norm;
 import main.norms.NormChecker;
@@ -15,6 +16,7 @@ import main.norms.Prohibition;
 import main.scrum.roles.ProductOwner;
 import main.scrum.roles.Role;
 
+import org.hibernate.Session;
 import org.junit.Test;
 
 /**
@@ -72,7 +74,9 @@ public class NormCheckerTests {
 		
 		String expression = "condition == false && condition2 < 6 || condition3 != false || condition4 > 10";
 
-		String result = ConditionEvaluator.processConditions(expression);
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		String result = ConditionEvaluator.processConditions(expression, session);
+		session.close();
 		assertTrue("Incorrectly processed condition", result.equals("true == false && 5 < 6 || false != false || 10 > 10"));
 	}
 	
@@ -134,7 +138,7 @@ public class NormCheckerTests {
 		Helper.refreshDatabase();
 		
 		// start a new thread running the normChecker
-		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
+		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/ScrumManager/src/main/resources/norms.conf");
 		Thread thread = new Thread(normChecker);
 		thread.start();
 
@@ -157,7 +161,7 @@ public class NormCheckerTests {
 	@Test
 	public void activationOfProhibitionsTest() throws InterruptedException {
 		// start a new thread running the normChecker
-		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
+		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/ScrumManager/src/main/resources/norms.conf");
 		ProductOwner productOwner = new ProductOwner("Sam");
 
 		Thread thread = new Thread(normChecker);
@@ -167,7 +171,9 @@ public class NormCheckerTests {
 
 		// this action of the scrum master activates the prohibition defined below so that it can be tested
 		Thread.sleep(9000);
-		main.Helper.updateBlackboardEntryRecord("planningSession", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		main.Helper.updateBlackboardEntryRecord("planningSession", "true",session);
+		session.close();
 
 		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false");
 

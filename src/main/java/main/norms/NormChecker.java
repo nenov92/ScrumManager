@@ -4,8 +4,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.hibernate.Session;
+
 import main.Constants;
 import main.Helper;
+import main.database.HibernateUtil;
 import main.scrum.roles.Role;
 
 /**
@@ -63,8 +66,10 @@ public class NormChecker implements Runnable {
 		// until the tread is not suspended, dynamically assign obligations and prohibitions
 		// after a constant time check if the obligations have been achieved
 		while (running) {
-			activateObligations(norm);
-			activateProhibitions(norm);
+			Session session = HibernateUtil.getSessionfactory().openSession();
+			
+			activateObligations(norm, session);
+			activateProhibitions(norm, session);
 			
 			try {
 				Thread.sleep(Constants.SLEEP_MED_LOW);
@@ -72,7 +77,8 @@ public class NormChecker implements Runnable {
 				e.printStackTrace();
 			}
 			
-			checkObligations();
+			checkObligations(session);
+			session.close();
 		}
 	}
 	
@@ -112,7 +118,7 @@ public class NormChecker implements Runnable {
 	/**
 	 * @param norm 
 	 */
-	private static void activateObligations(Norm norm) {
+	private static void activateObligations(Norm norm, Session session) {
 		// check if norm has any obligations loaded
 		if (norm.getObligations().size() > 0) {
 			// for each obligation parsed in the norm file
@@ -121,8 +127,8 @@ public class NormChecker implements Runnable {
 				// if activation condition is TRUE and expiration condition is FALSE and this obligation is not already activated 
 				// and there is no prohibition for the role of the obligation to perform the same action
 				// then activate this obligation
-				if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition())) &&
-						!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpirationCondition())) && 
+				if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getActivationCondition(), session)) &&
+						!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getExpirationCondition(), session)) && 
 						!getActiveObligations().contains(obligation) && !isActionProhibited(obligation.getRoleId(), obligation.getActionFunction(), getActiveProhibitions())) {
 					
 					System.out.println("Obligation activated: " + obligation.getRoleId() + " has to perform action " + obligation.getActionFunction());
@@ -135,18 +141,18 @@ public class NormChecker implements Runnable {
 	/**
 	 * @param norm: norm holding prohibitions
 	 */
-	private static void activateProhibitions(Norm norm) {
+	private static void activateProhibitions(Norm norm, Session session) {
 		// for each prohibition parsed in the norm file
 		for (Prohibition prohibition : norm.getProhibitions()) {
 			// if activation condition is TRUE and expiration condition is FALSE activate prohibition
-			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) &&
-					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition()))) {
+			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) &&
+					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition(), session))) {
 				
 				System.out.println("Prohibition activated: " + prohibition.getRoleId() + " is prohibited to perform " + prohibition.getActionName());
 				addActiveProhibition(prohibition);
 				// if activation condition is FALSE and expiration condition is TRUE  and the prohibition is part of the set of active prohibitions, then deactivate this prohibition	
-			} else if (getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition())) == false ||
-					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition())))) {
+			} else if (getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) == false ||
+					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition(), session)))) {
 				deleteActiveProhibition(prohibition);
 			}
 		}
@@ -155,18 +161,18 @@ public class NormChecker implements Runnable {
 	/**
 	 * this method is used to check if active obligations have been fulfilled; periodically run at a given time quantum   
 	 */
-	private static void checkObligations() {
+	private static void checkObligations(Session session) {
 		Obligation obligation;
 		// iterate through all active obligations and check if it has been fulfilled  
 		Iterator<Obligation> iterator = getActiveObligations().iterator();
 		while(iterator.hasNext()){
 			obligation = iterator.next();
 			// if it has been fulfilled, then deactivate it, otherwise inform that it is still active
-			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getFulfilledCondition()))) {
+			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getFulfilledCondition(), session))) {
 				System.out.println("Obligation for " + obligation.getRoleId() + " to perform action " + obligation.getActionFunction() + " has been fulfilled");
 
 				iterator.remove(); // solves concurrent modification exception
-			} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledCondition()))) {
+			} else if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(obligation.getNotFulfilledCondition(), session))) {
 				System.out.println("Obligation for " + obligation.getRoleId() + " to perform action " + obligation.getActionFunction() + " has NOT been fulfilled");
 			}
 		}

@@ -1,11 +1,13 @@
 package main.events;
 
 import main.Constants;
+import main.database.HibernateUtil;
 import main.gui.GUI;
 import main.gui.Helper;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.hibernate.Session;
 
 /**
  * The MIT License
@@ -36,7 +38,9 @@ public class DailyMeeting implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(577, 250);
 
-		main.Helper.updateBlackboardEntryRecord("daily", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		main.Helper.updateBlackboardEntryRecord("daily", "true", session);
+		session.close();
 		
 		Thread.sleep(Constants.SLEEP_MED);
 		
@@ -44,9 +48,11 @@ public class DailyMeeting implements JavaDelegate {
 			Thread.sleep(Constants.SLEEP_MED);
 		}
 
-		main.Helper.updateBlackboardEntryRecord("daily", "false");
-		main.Helper.updateBlackboardEntryRecord("statusUpdated", "false");
-		main.Helper.updateBlackboardEntryRecord("underFifteen", "false");
+		session = HibernateUtil.getSessionfactory().openSession();
+		main.Helper.updateBlackboardEntryRecord("daily", "false", session);
+		main.Helper.updateBlackboardEntryRecord("statusUpdated", "false", session);
+		main.Helper.updateBlackboardEntryRecord("underFifteen", "false", session);
+		session.close();
 		
 		System.out.println("XOR check: More Days for Implementation?");
 		gui = Helper.getGUI();

@@ -7,9 +7,9 @@ import java.io.InputStream;
 
 import javax.script.ScriptEngineManager;
 
-import main.database.GenericDaoImpl;
-import main.database.SessionUtil;
 import main.database.BlackboardEntry;
+import main.database.GenericDaoImpl;
+import main.database.HibernateUtil;
 import main.gui.InputConsole;
 import main.norms.Norm;
 import main.norms.NormChecker;
@@ -68,78 +68,79 @@ public class Helper {
 	 * 
 	 * This method updates entries in the database
 	 */
-	public static void updateBlackboardEntryRecord(String name, String value) {
-		Session session = SessionUtil.getINSTANCE();
+	public static void updateBlackboardEntryRecord(String name, String value, Session session) {
 		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-		SessionUtil.beginTransaction();
+		
+		session.beginTransaction();
 		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName(name);
 		if (blackboardEntry != null) {
 			blackboardEntry.setCurrentValue(value);
 			blackboardEntryDao.createOrUpdate(blackboardEntry);
 		}
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 	}
 
 	/**
 	 * @param name: BlackboardEntry name, used to retrieve an entry of int type and increment its current value by 1 
 	 */
-	public static void incrementBlackboardEntryRecord(String name) {
-		Session session = SessionUtil.getINSTANCE();
+	public static void incrementBlackboardEntryRecord(String name, Session session) {
 		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-		SessionUtil.beginTransaction();
+		session.beginTransaction();
 		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName(name);
 		if (blackboardEntry != null) {
 			blackboardEntry.setCurrentValue("" + (Integer.parseInt(blackboardEntry.getCurrentValue()) + 1));
 			blackboardEntryDao.createOrUpdate(blackboardEntry);
 		}
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 	}
 
 	/**
 	 * @param name: BlackboardEntry name, used to retrieve an entry of int type and decrement its current value by 1 
 	 */
-	public static void decrementBlackboardEntryRecord(String name) {
-		Session session = SessionUtil.getINSTANCE();
+	public static void decrementBlackboardEntryRecord(String name, Session session) {
 		GenericDaoImpl<BlackboardEntry> blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-		SessionUtil.beginTransaction();
+		session.beginTransaction();
 		BlackboardEntry blackboardEntry = blackboardEntryDao.findByBlackboardEntryName(name);
 		if (blackboardEntry != null) {
 			blackboardEntry.setCurrentValue("" + (Integer.parseInt(blackboardEntry.getCurrentValue()) - 1));
 			blackboardEntryDao.createOrUpdate(blackboardEntry);
 		}
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 	}
 
 	/**
 	 * This method returns the original database state; used either before or after the program is run  
 	 */
 	public static void refreshDatabase() {
-		Helper.updateBlackboardEntryRecord("groomingSession", "false");
-		Helper.updateBlackboardEntryRecord("activeSprint", "true");
-		Helper.updateBlackboardEntryRecord("checkRequirements", "false");
-		Helper.updateBlackboardEntryRecord("planningSession", "false");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("groomingSession", "false", session);
+		Helper.updateBlackboardEntryRecord("activeSprint", "true", session);
+		Helper.updateBlackboardEntryRecord("checkRequirements", "false", session);
+		Helper.updateBlackboardEntryRecord("planningSession", "false", session);
 
-		Helper.updateBlackboardEntryRecord("scrumStart", "true");
-		Helper.updateBlackboardEntryRecord("dodCompleted", "false");
-		Helper.updateBlackboardEntryRecord("sprintLength", "false");
-		Helper.updateBlackboardEntryRecord("planningSplit", "false");
-		Helper.updateBlackboardEntryRecord("taskMetric", "false");
+		Helper.updateBlackboardEntryRecord("scrumStart", "true", session);
+		Helper.updateBlackboardEntryRecord("dodCompleted", "false", session);
+		Helper.updateBlackboardEntryRecord("sprintLength", "false", session);
+		Helper.updateBlackboardEntryRecord("planningSplit", "false", session);
+		Helper.updateBlackboardEntryRecord("taskMetric", "false", session);
 		
-		Helper.updateBlackboardEntryRecord("backlog", "false");
-		Helper.updateBlackboardEntryRecord("backlogSorted", "false");
-		Helper.updateBlackboardEntryRecord("clarificationsAsked", "false");
-		Helper.updateBlackboardEntryRecord("clarificationsGiven", "false");
+		Helper.updateBlackboardEntryRecord("backlog", "false", session);
+		Helper.updateBlackboardEntryRecord("backlogSorted", "false", session);
+		Helper.updateBlackboardEntryRecord("clarificationsAsked", "false", session);
+		Helper.updateBlackboardEntryRecord("clarificationsGiven", "false", session);
 		
-		Helper.updateBlackboardEntryRecord("taskEstimation", "false");
-		Helper.updateBlackboardEntryRecord("estimationChanged", "false");
+		Helper.updateBlackboardEntryRecord("taskEstimation", "false", session);
+		Helper.updateBlackboardEntryRecord("estimationChanged", "false", session);
 		
-		Helper.updateBlackboardEntryRecord("daily", "false");
-		Helper.updateBlackboardEntryRecord("review", "false");
-		Helper.updateBlackboardEntryRecord("retrospective", "false");
-		Helper.updateBlackboardEntryRecord("statusUpdated", "false");
-		Helper.updateBlackboardEntryRecord("underFifteen", "false");
-		Helper.updateBlackboardEntryRecord("demo", "false");
-		Helper.updateBlackboardEntryRecord("feedbackGiven", "false");
+		Helper.updateBlackboardEntryRecord("daily", "false", session);
+		Helper.updateBlackboardEntryRecord("review", "false", session);
+		Helper.updateBlackboardEntryRecord("retrospective", "false", session);
+		Helper.updateBlackboardEntryRecord("statusUpdated", "false", session);
+		Helper.updateBlackboardEntryRecord("underFifteen", "false", session);
+		Helper.updateBlackboardEntryRecord("demo", "false", session);
+		Helper.updateBlackboardEntryRecord("feedbackGiven", "false", session);
+		
+		session.close();
 	}
 
 	

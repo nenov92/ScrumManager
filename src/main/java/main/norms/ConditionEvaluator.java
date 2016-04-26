@@ -9,7 +9,6 @@ import javax.script.ScriptException;
 import main.Helper;
 import main.database.BlackboardEntry;
 import main.database.GenericDaoImpl;
-import main.database.SessionUtil;
 
 import org.hibernate.Session;
 
@@ -41,7 +40,7 @@ public class ConditionEvaluator {
 	 * @return the same string of conditions, but instead the names of the parameters
 	 * 		   are substituted with their real values taken from the database
 	 */
-	public static String processConditions(String conditions) {
+	public static String processConditions(String conditions , Session session) {
 		
 		// mechanism to assure that only a valid conditions string will be processed 
 		if (conditions == null || conditions.equals("")) {
@@ -60,14 +59,13 @@ public class ConditionEvaluator {
 
 		// for every variable name retrieve its value from the database and substitute the name with the actual value in the processed string
 		for (String variable : variables) {
-			Session session = SessionUtil.getINSTANCE();
 			GenericDaoImpl<BlackboardEntry> symbolDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
-			SessionUtil.beginTransaction();
-			BlackboardEntry s = symbolDao.findByBlackboardEntryName(variable);
-			SessionUtil.commitTransaction();
-
+			session.beginTransaction();
+			BlackboardEntry blackboardEntry = symbolDao.findByBlackboardEntryName(variable);
+			session.getTransaction().commit();
+			
 			// substitute the variable name with a real value
-			conditions = conditions.replaceFirst(variable, s.getCurrentValue());
+			conditions = conditions.replaceFirst(variable, blackboardEntry.getCurrentValue());
 		}
 
 		return conditions;

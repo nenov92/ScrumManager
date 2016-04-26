@@ -40,7 +40,7 @@ public class ScrumRolesTests {
 	@Test
 	public void startSprintFnUnitTest() throws InterruptedException {
 		// start a new thread running the normChecker
-		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/scrum-workflow/src/main/resources/norms.conf");
+		NormChecker normChecker = new NormChecker("F:/Dev/JavaWorkspace/ScrumManager/src/main/resources/norms.conf");
 		ScrumMaster scrumMaster = new ScrumMaster("Sam");
 
 		Thread thread = new Thread(normChecker);

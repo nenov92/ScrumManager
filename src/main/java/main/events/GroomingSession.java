@@ -1,11 +1,13 @@
 package main.events;
 
 import main.Constants;
+import main.database.HibernateUtil;
 import main.gui.GUI;
 import main.gui.Helper;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.hibernate.Session;
 
 /**
  * The MIT License
@@ -36,7 +38,9 @@ public class GroomingSession implements JavaDelegate {
 		gui.refreshBackground();
 		gui.drawToBackground(250, 250);
 
-		main.Helper.updateBlackboardEntryRecord("groomingSession", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		
+		main.Helper.updateBlackboardEntryRecord("groomingSession", "true", session);
 		
 		Thread.sleep(Constants.SLEEP_MED);
 		
@@ -44,6 +48,8 @@ public class GroomingSession implements JavaDelegate {
 			Thread.sleep(Constants.SLEEP_MED);
 		}
 		
-		main.Helper.updateBlackboardEntryRecord("groomingSession", "false");
+		main.Helper.updateBlackboardEntryRecord("groomingSession", "false", session);
+		
+		session.close();
 	}
 }

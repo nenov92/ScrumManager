@@ -1,6 +1,9 @@
 package main.scrum.roles;
 
+import org.hibernate.Session;
+
 import main.Helper;
+import main.database.HibernateUtil;
 import main.gui.InputConsole;
 
 /**
@@ -66,31 +69,41 @@ public class ProductOwner extends ScrumParticipant implements Runnable {
 	public static void prepareBacklog() {
 		System.out.println("Product Owner: Preparing Backlog");
 
-		Helper.updateBlackboardEntryRecord("backlog", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("backlog", "true", session);
+		session.close();
 	}
 	
 	public static void sortBacklog() {
 		System.out.println("Product Owner: Sorting Backlog");
 
-		Helper.updateBlackboardEntryRecord("backlogSorted", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("backlogSorted", "true", session);
+		session.close();
 	}
 	
 	public static void giveClarifications() {
 		System.out.println("Product Owner: Giving Clarifications");
 
-		Helper.updateBlackboardEntryRecord("clarificationsGiven", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("clarificationsGiven", "true", session);
+		session.close();
 	}
 	
 	public static void changeTaskEstimation() {
 		System.out.println("Product Owner: Illegally Changing Task Estimations");
 
-		Helper.updateBlackboardEntryRecord("estimationChanged", "true");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("estimationChanged", "true", session);
+		session.close();
 	}
 	
 	public static void removeEstimationChange() {
 		System.out.println("Product Owner: Removing Illegally Changed Task Estimations");
 
-		Helper.updateBlackboardEntryRecord("estimationChanged", "false");
+		Session session = HibernateUtil.getSessionfactory().openSession();
+		Helper.updateBlackboardEntryRecord("estimationChanged", "false", session);
+		session.close();
 	}
 	
 	public void closeConsole() {
