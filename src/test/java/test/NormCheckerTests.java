@@ -91,7 +91,7 @@ public class NormCheckerTests {
 		int prohSetSize = 0;
 
 		Obligation obligation = new Obligation(10, Role.PRODUCT_OWNER, "action", "condition == true && condition2 > 3", "condition == false", "condition == true", "condition2 < 3");
-		Prohibition prohibition = new Prohibition(1, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false");
+		Prohibition prohibition = new Prohibition(1, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false", "condition == true");
 
 		norm.addObligation(obligation);
 		norm.addProhibition(prohibition);
@@ -111,8 +111,8 @@ public class NormCheckerTests {
 	 */
 	@Test
 	public void isActionProhibitedFnUnitTest() {
-		Prohibition prohibition = new Prohibition(1, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false");
-		Prohibition prohibition1 = new Prohibition(2, Role.DEV_TEAM, "completeTask", "taskCompleted == true", "implementationStage == false");
+		Prohibition prohibition = new Prohibition(1, Role.SCRUM_MASTER, "assignTask", "task1Assignees == 1 && planningSession == true", "planningSession == false", "condition == true");
+		Prohibition prohibition1 = new Prohibition(2, Role.DEV_TEAM, "completeTask", "taskCompleted == true", "implementationStage == false", "condition == true");
 
 		Set<Prohibition> prohibitions = new HashSet<Prohibition>();
 		prohibitions.add(prohibition);
@@ -175,7 +175,7 @@ public class NormCheckerTests {
 		main.Helper.updateBlackboardEntryRecord("planningSession", "true",session);
 		session.close();
 
-		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false");
+		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false", "estimationChanged == true");
 
 		Thread.sleep(10000);
 		boolean prohBool = normChecker.getActiveProhibitions().contains(prohibition);

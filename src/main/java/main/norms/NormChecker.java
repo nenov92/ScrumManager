@@ -145,14 +145,17 @@ public class NormChecker implements Runnable {
 		// for each prohibition parsed in the norm file
 		for (Prohibition prohibition : norm.getProhibitions()) {
 			// if activation condition is TRUE and expiration condition is FALSE activate prohibition
-			if (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) &&
+			if (!getActiveProhibitions().contains(prohibition) && ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) &&
 					!ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition(), session))) {
 				
 				System.out.println("Prohibition activated: " + prohibition.getRoleId() + " is prohibited to perform " + prohibition.getActionName());
 				addActiveProhibition(prohibition);
 				// if activation condition is FALSE and expiration condition is TRUE  and the prohibition is part of the set of active prohibitions, then deactivate this prohibition	
-			} else if (getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) == false ||
-					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition(), session)))) {
+			} else if (getActiveProhibitions().contains(prohibition) && getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) == false ||
+					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition(), session))) && 
+					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getViolatedCondition(), session)) == false) {
+				
+				System.out.println("Prohibition deactivated: " + prohibition.getRoleId() + " is no longer prohibited to perform " + prohibition.getActionName());
 				deleteActiveProhibition(prohibition);
 			}
 		}

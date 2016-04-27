@@ -112,6 +112,18 @@ public class NormBaseListener implements NormListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterViolatedCondition(NormParser.ViolatedConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitViolatedCondition(NormParser.ViolatedConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterTuple(NormParser.TupleContext ctx) { }
 	/**
 	 * {@inheritDoc}

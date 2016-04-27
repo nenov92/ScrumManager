@@ -23,12 +23,12 @@ public class NormParser extends Parser {
 	public static final int
 		RULE_prog = 0, RULE_norm = 1, RULE_obligation = 2, RULE_prohibition = 3, 
 		RULE_activationCondition = 4, RULE_expirationCondition = 5, RULE_fulfilledCondition = 6, 
-		RULE_notFulfilledCondition = 7, RULE_tuple = 8, RULE_bool = 9, RULE_comparator = 10, 
-		RULE_value = 11;
+		RULE_notFulfilledCondition = 7, RULE_violatedCondition = 8, RULE_tuple = 9, 
+		RULE_bool = 10, RULE_comparator = 11, RULE_value = 12;
 	public static final String[] ruleNames = {
 		"prog", "norm", "obligation", "prohibition", "activationCondition", "expirationCondition", 
-		"fulfilledCondition", "notFulfilledCondition", "tuple", "bool", "comparator", 
-		"value"
+		"fulfilledCondition", "notFulfilledCondition", "violatedCondition", "tuple", 
+		"bool", "comparator", "value"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -121,31 +121,31 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(33);
+			setState(35);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==T__0) {
 				{
 				{
-				setState(24);
+				setState(26);
 				norm();
-				setState(28);
+				setState(30);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==NEWLINE) {
 					{
 					{
-					setState(25);
+					setState(27);
 					match(NEWLINE);
 					}
 					}
-					setState(30);
+					setState(32);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
 				}
 				}
-				setState(35);
+				setState(37);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -187,20 +187,20 @@ public class NormParser extends Parser {
 		NormContext _localctx = new NormContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_norm);
 		try {
-			setState(38);
+			setState(40);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(36);
+				setState(38);
 				obligation();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(37);
+				setState(39);
 				prohibition();
 				}
 				break;
@@ -255,41 +255,41 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(40);
-			match(T__0);
-			setState(41);
-			match(LPAREN);
 			setState(42);
-			match(INTEGER);
+			match(T__0);
 			setState(43);
-			match(T__1);
+			match(LPAREN);
 			setState(44);
-			match(T__2);
+			match(INTEGER);
 			setState(45);
 			match(T__1);
 			setState(46);
-			match(ROLE);
+			match(T__2);
 			setState(47);
 			match(T__1);
 			setState(48);
-			match(NAME);
+			match(ROLE);
 			setState(49);
 			match(T__1);
 			setState(50);
-			activationCondition();
+			match(NAME);
 			setState(51);
 			match(T__1);
 			setState(52);
-			expirationCondition();
+			activationCondition();
 			setState(53);
 			match(T__1);
 			setState(54);
-			fulfilledCondition();
+			expirationCondition();
 			setState(55);
 			match(T__1);
 			setState(56);
-			notFulfilledCondition();
+			fulfilledCondition();
 			setState(57);
+			match(T__1);
+			setState(58);
+			notFulfilledCondition();
+			setState(59);
 			match(RPAREN);
 			}
 		}
@@ -315,6 +315,9 @@ public class NormParser extends Parser {
 		public ExpirationConditionContext expirationCondition() {
 			return getRuleContext(ExpirationConditionContext.class,0);
 		}
+		public ViolatedConditionContext violatedCondition() {
+			return getRuleContext(ViolatedConditionContext.class,0);
+		}
 		public TerminalNode RPAREN() { return getToken(NormParser.RPAREN, 0); }
 		public ProhibitionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -336,33 +339,37 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(59);
-			match(T__0);
-			setState(60);
-			match(LPAREN);
 			setState(61);
-			match(INTEGER);
+			match(T__0);
 			setState(62);
-			match(T__1);
+			match(LPAREN);
 			setState(63);
-			match(T__3);
+			match(INTEGER);
 			setState(64);
 			match(T__1);
 			setState(65);
-			match(ROLE);
+			match(T__3);
 			setState(66);
 			match(T__1);
 			setState(67);
-			match(NAME);
+			match(ROLE);
 			setState(68);
 			match(T__1);
 			setState(69);
-			activationCondition();
+			match(NAME);
 			setState(70);
 			match(T__1);
 			setState(71);
-			expirationCondition();
+			activationCondition();
 			setState(72);
+			match(T__1);
+			setState(73);
+			expirationCondition();
+			setState(74);
+			match(T__1);
+			setState(75);
+			violatedCondition();
+			setState(76);
 			match(RPAREN);
 			}
 		}
@@ -409,21 +416,21 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(74);
+			setState(78);
 			tuple();
-			setState(79);
+			setState(83);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==LOGICAL_OPERATOR) {
 				{
 				{
-				setState(75);
+				setState(79);
 				match(LOGICAL_OPERATOR);
-				setState(76);
+				setState(80);
 				tuple();
 				}
 				}
-				setState(81);
+				setState(85);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -472,21 +479,21 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(82);
+			setState(86);
 			tuple();
-			setState(87);
+			setState(91);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==LOGICAL_OPERATOR) {
 				{
 				{
-				setState(83);
+				setState(87);
 				match(LOGICAL_OPERATOR);
-				setState(84);
+				setState(88);
 				tuple();
 				}
 				}
-				setState(89);
+				setState(93);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -535,21 +542,21 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(90);
+			setState(94);
 			tuple();
-			setState(95);
+			setState(99);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==LOGICAL_OPERATOR) {
 				{
 				{
-				setState(91);
+				setState(95);
 				match(LOGICAL_OPERATOR);
-				setState(92);
+				setState(96);
 				tuple();
 				}
 				}
-				setState(97);
+				setState(101);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -598,21 +605,84 @@ public class NormParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(98);
+			setState(102);
 			tuple();
-			setState(103);
+			setState(107);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==LOGICAL_OPERATOR) {
 				{
 				{
-				setState(99);
+				setState(103);
 				match(LOGICAL_OPERATOR);
-				setState(100);
+				setState(104);
 				tuple();
 				}
 				}
-				setState(105);
+				setState(109);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class ViolatedConditionContext extends ParserRuleContext {
+		public List<TupleContext> tuple() {
+			return getRuleContexts(TupleContext.class);
+		}
+		public TupleContext tuple(int i) {
+			return getRuleContext(TupleContext.class,i);
+		}
+		public List<TerminalNode> LOGICAL_OPERATOR() { return getTokens(NormParser.LOGICAL_OPERATOR); }
+		public TerminalNode LOGICAL_OPERATOR(int i) {
+			return getToken(NormParser.LOGICAL_OPERATOR, i);
+		}
+		public ViolatedConditionContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_violatedCondition; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof NormListener ) ((NormListener)listener).enterViolatedCondition(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof NormListener ) ((NormListener)listener).exitViolatedCondition(this);
+		}
+	}
+
+	public final ViolatedConditionContext violatedCondition() throws RecognitionException {
+		ViolatedConditionContext _localctx = new ViolatedConditionContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_violatedCondition);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(110);
+			tuple();
+			setState(115);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==LOGICAL_OPERATOR) {
+				{
+				{
+				setState(111);
+				match(LOGICAL_OPERATOR);
+				setState(112);
+				tuple();
+				}
+				}
+				setState(117);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -653,15 +723,15 @@ public class NormParser extends Parser {
 
 	public final TupleContext tuple() throws RecognitionException {
 		TupleContext _localctx = new TupleContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_tuple);
+		enterRule(_localctx, 18, RULE_tuple);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(106);
+			setState(118);
 			match(NAME);
-			setState(107);
+			setState(119);
 			comparator();
-			setState(108);
+			setState(120);
 			value();
 			}
 		}
@@ -693,12 +763,12 @@ public class NormParser extends Parser {
 
 	public final BoolContext bool() throws RecognitionException {
 		BoolContext _localctx = new BoolContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_bool);
+		enterRule(_localctx, 20, RULE_bool);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110);
+			setState(122);
 			_la = _input.LA(1);
 			if ( !(_la==T__4 || _la==T__5) ) {
 			_errHandler.recoverInline(this);
@@ -735,12 +805,12 @@ public class NormParser extends Parser {
 
 	public final ComparatorContext comparator() throws RecognitionException {
 		ComparatorContext _localctx = new ComparatorContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_comparator);
+		enterRule(_localctx, 22, RULE_comparator);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(112);
+			setState(124);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__6) | (1L << T__7) | (1L << T__8) | (1L << T__9) | (1L << T__10) | (1L << T__11))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -781,22 +851,22 @@ public class NormParser extends Parser {
 
 	public final ValueContext value() throws RecognitionException {
 		ValueContext _localctx = new ValueContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_value);
+		enterRule(_localctx, 24, RULE_value);
 		try {
-			setState(116);
+			setState(128);
 			switch (_input.LA(1)) {
 			case T__4:
 			case T__5:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(114);
+				setState(126);
 				bool();
 				}
 				break;
 			case INTEGER:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(115);
+				setState(127);
 				match(INTEGER);
 				}
 				break;
@@ -816,34 +886,38 @@ public class NormParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\26y\4\2\t\2\4\3\t"+
-		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t\13\4"+
-		"\f\t\f\4\r\t\r\3\2\3\2\7\2\35\n\2\f\2\16\2 \13\2\7\2\"\n\2\f\2\16\2%\13"+
-		"\2\3\3\3\3\5\3)\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3"+
-		"\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5"+
-		"\3\5\3\5\3\5\3\5\3\6\3\6\3\6\7\6P\n\6\f\6\16\6S\13\6\3\7\3\7\3\7\7\7X"+
-		"\n\7\f\7\16\7[\13\7\3\b\3\b\3\b\7\b`\n\b\f\b\16\bc\13\b\3\t\3\t\3\t\7"+
-		"\th\n\t\f\t\16\tk\13\t\3\n\3\n\3\n\3\n\3\13\3\13\3\f\3\f\3\r\3\r\5\rw"+
-		"\n\r\3\r\2\2\16\2\4\6\b\n\f\16\20\22\24\26\30\2\4\3\2\7\b\3\2\t\16t\2"+
-		"#\3\2\2\2\4(\3\2\2\2\6*\3\2\2\2\b=\3\2\2\2\nL\3\2\2\2\fT\3\2\2\2\16\\"+
-		"\3\2\2\2\20d\3\2\2\2\22l\3\2\2\2\24p\3\2\2\2\26r\3\2\2\2\30v\3\2\2\2\32"+
-		"\36\5\4\3\2\33\35\7\25\2\2\34\33\3\2\2\2\35 \3\2\2\2\36\34\3\2\2\2\36"+
-		"\37\3\2\2\2\37\"\3\2\2\2 \36\3\2\2\2!\32\3\2\2\2\"%\3\2\2\2#!\3\2\2\2"+
-		"#$\3\2\2\2$\3\3\2\2\2%#\3\2\2\2&)\5\6\4\2\')\5\b\5\2(&\3\2\2\2(\'\3\2"+
-		"\2\2)\5\3\2\2\2*+\7\3\2\2+,\7\17\2\2,-\7\21\2\2-.\7\4\2\2./\7\5\2\2/\60"+
-		"\7\4\2\2\60\61\7\22\2\2\61\62\7\4\2\2\62\63\7\23\2\2\63\64\7\4\2\2\64"+
-		"\65\5\n\6\2\65\66\7\4\2\2\66\67\5\f\7\2\678\7\4\2\289\5\16\b\29:\7\4\2"+
-		"\2:;\5\20\t\2;<\7\20\2\2<\7\3\2\2\2=>\7\3\2\2>?\7\17\2\2?@\7\21\2\2@A"+
-		"\7\4\2\2AB\7\6\2\2BC\7\4\2\2CD\7\22\2\2DE\7\4\2\2EF\7\23\2\2FG\7\4\2\2"+
-		"GH\5\n\6\2HI\7\4\2\2IJ\5\f\7\2JK\7\20\2\2K\t\3\2\2\2LQ\5\22\n\2MN\7\24"+
-		"\2\2NP\5\22\n\2OM\3\2\2\2PS\3\2\2\2QO\3\2\2\2QR\3\2\2\2R\13\3\2\2\2SQ"+
-		"\3\2\2\2TY\5\22\n\2UV\7\24\2\2VX\5\22\n\2WU\3\2\2\2X[\3\2\2\2YW\3\2\2"+
-		"\2YZ\3\2\2\2Z\r\3\2\2\2[Y\3\2\2\2\\a\5\22\n\2]^\7\24\2\2^`\5\22\n\2_]"+
-		"\3\2\2\2`c\3\2\2\2a_\3\2\2\2ab\3\2\2\2b\17\3\2\2\2ca\3\2\2\2di\5\22\n"+
-		"\2ef\7\24\2\2fh\5\22\n\2ge\3\2\2\2hk\3\2\2\2ig\3\2\2\2ij\3\2\2\2j\21\3"+
-		"\2\2\2ki\3\2\2\2lm\7\23\2\2mn\5\26\f\2no\5\30\r\2o\23\3\2\2\2pq\t\2\2"+
-		"\2q\25\3\2\2\2rs\t\3\2\2s\27\3\2\2\2tw\5\24\13\2uw\7\21\2\2vt\3\2\2\2"+
-		"vu\3\2\2\2w\31\3\2\2\2\n\36#(QYaiv";
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\26\u0085\4\2\t\2"+
+		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
+		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\3\2\3\2\7\2\37\n\2\f\2\16\2\"\13\2\7\2"+
+		"$\n\2\f\2\16\2\'\13\2\3\3\3\3\5\3+\n\3\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4"+
+		"\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\4\3\5\3\5\3\5\3\5\3\5\3\5\3"+
+		"\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\5\3\6\3\6\3\6\7\6T\n\6\f\6\16"+
+		"\6W\13\6\3\7\3\7\3\7\7\7\\\n\7\f\7\16\7_\13\7\3\b\3\b\3\b\7\bd\n\b\f\b"+
+		"\16\bg\13\b\3\t\3\t\3\t\7\tl\n\t\f\t\16\to\13\t\3\n\3\n\3\n\7\nt\n\n\f"+
+		"\n\16\nw\13\n\3\13\3\13\3\13\3\13\3\f\3\f\3\r\3\r\3\16\3\16\5\16\u0083"+
+		"\n\16\3\16\2\2\17\2\4\6\b\n\f\16\20\22\24\26\30\32\2\4\3\2\7\b\3\2\t\16"+
+		"\u0080\2%\3\2\2\2\4*\3\2\2\2\6,\3\2\2\2\b?\3\2\2\2\nP\3\2\2\2\fX\3\2\2"+
+		"\2\16`\3\2\2\2\20h\3\2\2\2\22p\3\2\2\2\24x\3\2\2\2\26|\3\2\2\2\30~\3\2"+
+		"\2\2\32\u0082\3\2\2\2\34 \5\4\3\2\35\37\7\25\2\2\36\35\3\2\2\2\37\"\3"+
+		"\2\2\2 \36\3\2\2\2 !\3\2\2\2!$\3\2\2\2\" \3\2\2\2#\34\3\2\2\2$\'\3\2\2"+
+		"\2%#\3\2\2\2%&\3\2\2\2&\3\3\2\2\2\'%\3\2\2\2(+\5\6\4\2)+\5\b\5\2*(\3\2"+
+		"\2\2*)\3\2\2\2+\5\3\2\2\2,-\7\3\2\2-.\7\17\2\2./\7\21\2\2/\60\7\4\2\2"+
+		"\60\61\7\5\2\2\61\62\7\4\2\2\62\63\7\22\2\2\63\64\7\4\2\2\64\65\7\23\2"+
+		"\2\65\66\7\4\2\2\66\67\5\n\6\2\678\7\4\2\289\5\f\7\29:\7\4\2\2:;\5\16"+
+		"\b\2;<\7\4\2\2<=\5\20\t\2=>\7\20\2\2>\7\3\2\2\2?@\7\3\2\2@A\7\17\2\2A"+
+		"B\7\21\2\2BC\7\4\2\2CD\7\6\2\2DE\7\4\2\2EF\7\22\2\2FG\7\4\2\2GH\7\23\2"+
+		"\2HI\7\4\2\2IJ\5\n\6\2JK\7\4\2\2KL\5\f\7\2LM\7\4\2\2MN\5\22\n\2NO\7\20"+
+		"\2\2O\t\3\2\2\2PU\5\24\13\2QR\7\24\2\2RT\5\24\13\2SQ\3\2\2\2TW\3\2\2\2"+
+		"US\3\2\2\2UV\3\2\2\2V\13\3\2\2\2WU\3\2\2\2X]\5\24\13\2YZ\7\24\2\2Z\\\5"+
+		"\24\13\2[Y\3\2\2\2\\_\3\2\2\2][\3\2\2\2]^\3\2\2\2^\r\3\2\2\2_]\3\2\2\2"+
+		"`e\5\24\13\2ab\7\24\2\2bd\5\24\13\2ca\3\2\2\2dg\3\2\2\2ec\3\2\2\2ef\3"+
+		"\2\2\2f\17\3\2\2\2ge\3\2\2\2hm\5\24\13\2ij\7\24\2\2jl\5\24\13\2ki\3\2"+
+		"\2\2lo\3\2\2\2mk\3\2\2\2mn\3\2\2\2n\21\3\2\2\2om\3\2\2\2pu\5\24\13\2q"+
+		"r\7\24\2\2rt\5\24\13\2sq\3\2\2\2tw\3\2\2\2us\3\2\2\2uv\3\2\2\2v\23\3\2"+
+		"\2\2wu\3\2\2\2xy\7\23\2\2yz\5\30\r\2z{\5\32\16\2{\25\3\2\2\2|}\t\2\2\2"+
+		"}\27\3\2\2\2~\177\t\3\2\2\177\31\3\2\2\2\u0080\u0083\5\26\f\2\u0081\u0083"+
+		"\7\21\2\2\u0082\u0080\3\2\2\2\u0082\u0081\3\2\2\2\u0083\33\3\2\2\2\13"+
+		" %*U]emu\u0082";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -88,6 +88,16 @@ public interface NormListener extends ParseTreeListener {
 	 */
 	void exitNotFulfilledCondition(NormParser.NotFulfilledConditionContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link NormParser#violatedCondition}.
+	 * @param ctx the parse tree
+	 */
+	void enterViolatedCondition(NormParser.ViolatedConditionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link NormParser#violatedCondition}.
+	 * @param ctx the parse tree
+	 */
+	void exitViolatedCondition(NormParser.ViolatedConditionContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link NormParser#tuple}.
 	 * @param ctx the parse tree
 	 */

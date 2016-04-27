@@ -108,7 +108,7 @@ public class HelperTests {
 		assertTrue("Obligations are not loaded", norm.getObligations().size() > 0);
 		assertTrue("Prohibitions are not loaded", norm.getProhibitions().size() > 0);
 
-		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false");
+		Prohibition prohibition = new Prohibition(16, Role.PRODUCT_OWNER, "changeTaskEstimation", "planningSession == true", "planningSession == false", "estimationChanged == true");
 		assertTrue("Set of prohibitions does not contain all elements", norm.getProhibitions().contains(prohibition));
 	}
 }

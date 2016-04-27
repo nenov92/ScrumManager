@@ -42,8 +42,9 @@ public class NormWalker extends NormBaseListener {
 	public void enterProhibition(main.parser.NormParser.ProhibitionContext ctx) {
 		String activationCondition = returnConditionAsString(ctx.activationCondition().tuple(), ctx.activationCondition().LOGICAL_OPERATOR());
 		String expirationCondition = returnConditionAsString(ctx.expirationCondition().tuple(), ctx.expirationCondition().LOGICAL_OPERATOR());
+		String violatedCondition = returnConditionAsString(ctx.violatedCondition().tuple(), ctx.violatedCondition().LOGICAL_OPERATOR());
 
-		Prohibition prohibition = new Prohibition(Integer.parseInt(ctx.INTEGER().getText()), Role.valueOf(ctx.ROLE().getText()), ctx.NAME().getText(), activationCondition, expirationCondition);
+		Prohibition prohibition = new Prohibition(Integer.parseInt(ctx.INTEGER().getText()), Role.valueOf(ctx.ROLE().getText()), ctx.NAME().getText(), activationCondition, expirationCondition, violatedCondition);
 		prohibitions.add(prohibition);
 	}
 

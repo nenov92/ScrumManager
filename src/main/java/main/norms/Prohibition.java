@@ -30,17 +30,19 @@ public class Prohibition {
 	private String actionName;
 	private String activationCondition;
 	private String expirationCondition;
+	private String violatedCondition;
 
 	// empty constructor 
 	public Prohibition() {
 	}
 
-	public Prohibition(int id, Role roleId, String actionName, String activationCondition, String expirationCondition) {
+	public Prohibition(int id, Role roleId, String actionName, String activationCondition, String expirationCondition, String violatedCondition) {
 		this.id = id;
 		this.roleId = roleId;
 		this.actionName = actionName;
 		this.activationCondition = activationCondition;
 		this.expirationCondition = expirationCondition;
+		this.violatedCondition = violatedCondition;
 	}
 
 	/**
@@ -87,6 +89,14 @@ public class Prohibition {
 		this.expirationCondition = expirationCondition;
 	}
 
+	public String getViolatedCondition() {
+		return violatedCondition;
+	}
+
+	public void setViolatedCondition(String violatedCondition) {
+		this.violatedCondition = violatedCondition;
+	}
+
 	/** 
 	 * default object equals function overridden 
 	 */
@@ -118,7 +128,7 @@ public class Prohibition {
 	 */
 	@Override
 	public String toString() {
-		return "Prohibition [roleId: " + roleId + ", actionName: " + actionName + ", activationCondition: " + activationCondition + ", expriationCondition: " + expirationCondition + "]";
+		return "Prohibition [roleId: " + roleId + ", actionName: " + actionName + ", activationCondition: " + activationCondition + ", expriationCondition: " + expirationCondition + ", violatedCondition: " + violatedCondition + "]";
 	}
 
 }
