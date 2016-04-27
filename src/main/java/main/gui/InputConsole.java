@@ -223,7 +223,6 @@ public class InputConsole extends JFrame implements DocumentListener {
 					System.out.println("Action function triggered: " + methodField.getText());
 					method.invoke(user);
 				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
 				}
 				methodField.setText("");
 				methodField.setBackground(bgColour);

@@ -2,6 +2,9 @@ package test;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import main.database.BlackboardEntry;
+import main.database.GenericDaoImpl;
+import main.database.HibernateUtil;
 
 import org.hibernate.Session;
 import org.junit.After;
@@ -11,10 +14,6 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import main.database.BlackboardEntry;
-import main.database.GenericDaoImpl;
-import main.database.SessionUtil;
 
 /**
  * The MIT License
@@ -51,7 +50,7 @@ public class DatabaseOperationTests {
 	 */
 	@BeforeClass
 	public static void initializeSession() {
-		session = SessionUtil.getINSTANCE();
+		session = HibernateUtil.getSessionfactory().openSession();
 		blackboardEntryDao = new GenericDaoImpl<BlackboardEntry>(session, BlackboardEntry.class);
 	}
 
@@ -60,12 +59,7 @@ public class DatabaseOperationTests {
 	 */
 	@Before
 	public void beginTransaction() {
-		// verify that if session was not closed, if so create new instance
-		if (!session.isOpen()) {
-			session = SessionUtil.getINSTANCE();
-			blackboardEntryDao.setCurrentSession(session);
-		}
-		SessionUtil.beginTransaction();
+		session.beginTransaction();
 	}
 
 	/**
@@ -73,7 +67,7 @@ public class DatabaseOperationTests {
 	 */
 	@After
 	public void commitTransaction() {
-		SessionUtil.commitTransaction();
+		session.getTransaction().commit();
 	}
 
 	/**
@@ -81,7 +75,7 @@ public class DatabaseOperationTests {
 	 */
 	@AfterClass
 	public static void closeRunningSession() {
-		SessionUtil.closeSession();
+		session.close();
 	}
 	
 	/**

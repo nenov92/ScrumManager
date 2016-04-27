@@ -211,7 +211,6 @@ public class Helper {
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 		if (isObligationActive()) {
 			console.getObList().removeAllElements();
@@ -252,7 +251,6 @@ public class Helper {
 		try {
 			is = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		}
 
 		ANTLRInputStream input = null;
@@ -260,7 +258,6 @@ public class Helper {
 			// create a CharStream that reads from input
 			input = new ANTLRInputStream(is);
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 
 		// create a lexer that uses of input CharStream 

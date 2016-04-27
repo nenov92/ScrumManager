@@ -151,7 +151,7 @@ public class NormChecker implements Runnable {
 				System.out.println("Prohibition activated: " + prohibition.getRoleId() + " is prohibited to perform " + prohibition.getActionName());
 				addActiveProhibition(prohibition);
 				// if activation condition is FALSE and expiration condition is TRUE  and the prohibition is part of the set of active prohibitions, then deactivate this prohibition	
-			} else if (getActiveProhibitions().contains(prohibition) && getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) == false ||
+			} else if (getActiveProhibitions().contains(prohibition) && (ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getActivationCondition(), session)) == false ||
 					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getExpirationCondition(), session))) && 
 					ConditionEvaluator.evaluate(ConditionEvaluator.processConditions(prohibition.getViolatedCondition(), session)) == false) {
 				
