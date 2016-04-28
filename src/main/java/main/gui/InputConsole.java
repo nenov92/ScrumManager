@@ -27,26 +27,10 @@ import javax.swing.event.DocumentListener;
 import main.scrum.roles.Role;
 import main.scrum.roles.ScrumParticipant;
 
+
 /**
- * The MIT License
- * 
- * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a 
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
- * Software is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be 
- * included in all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * @author Miroslav Nenov
+ * Personal User Console 
  */
 public class InputConsole extends JFrame implements DocumentListener {
 
@@ -77,6 +61,7 @@ public class InputConsole extends JFrame implements DocumentListener {
 		initialiseComponents();
 		this.user = user;
 
+		// actions that are possible to execute by each Scrum role
 		content = new ArrayList<String>();
 		if (user.getRole() == Role.PRODUCT_OWNER) {
 			content.add("prepareBacklog");
@@ -104,10 +89,13 @@ public class InputConsole extends JFrame implements DocumentListener {
 
 		InputMap im = methodField.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap am = methodField.getActionMap();
+		
+		// bind action to enter key
 		im.put(KeyStroke.getKeyStroke("ENTER"), ENTER_ACTION);
 		am.put(ENTER_ACTION, new EnterAction());
 	}
 
+	// Initialize all elements in the window
 	private void initialiseComponents() {
 		obList = new DefaultListModel<String>();
 		prohList = new DefaultListModel<String>();
@@ -156,6 +144,11 @@ public class InputConsole extends JFrame implements DocumentListener {
 		contentPane.add(oList);
 	}
 
+	/*
+	 * getters and setters for the lists
+	 * holding the active obligations for this user
+	 */
+	
 	public DefaultListModel<String> getObList() {
 		return obList;
 	}
@@ -172,6 +165,7 @@ public class InputConsole extends JFrame implements DocumentListener {
 		this.prohList = prohList;
 	}
 
+	// check the list of defined methods
 	public void checkIfMethodDefiened() {
 		String s = methodField.getText();
 		if (s.length() <= 0) {
@@ -213,6 +207,7 @@ public class InputConsole extends JFrame implements DocumentListener {
 
 	}
 
+	// when input is entered trigger associated action
 	class EnterAction extends AbstractAction {
 		private static final long serialVersionUID = 1040470137965458333L;
 

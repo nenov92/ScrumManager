@@ -29,6 +29,7 @@ public class GUI extends JPanel {
 	private int prefH;
 	Graphics g;
 
+	// take background image and instantiate gui
 	public GUI(int x, int y) throws IOException {
 		File file = new File(Constants.GUI_BG_FILE_ON_SERVER);
 		bImg = ImageIO.read(file);
@@ -56,6 +57,7 @@ public class GUI extends JPanel {
 		return new Dimension(prefW, prefH);
 	}
 
+	// draw blue dot to the gui to show the current state of Scrum
 	public void drawToBackground(int x, int y) {
 		Graphics g = backgroundImg.getGraphics();
 		g.setColor(COLOR);
@@ -65,12 +67,14 @@ public class GUI extends JPanel {
 		this.repaint();
 	}
 
+	// update background when the dot moves
 	public void refreshBackground() {
 		g = backgroundImg.getGraphics();
 		g.drawImage(bImg, 0, 0, this);
 		g.dispose();
 	}
 
+	// start gui
 	public GUI createAndShowGui(int x, int y) throws IOException {
 		GUI mainPanel = new GUI(x, y);
 

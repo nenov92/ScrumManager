@@ -4,6 +4,10 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+/**
+ * @author Miroslav Nenov
+ * Utility class that starts the gui
+ */
 public class Helper {
 	private static JFrame frame = null;
 	private static GUI gui = null;

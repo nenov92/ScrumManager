@@ -32,6 +32,7 @@ public class Appender implements Runnable {
 		queue = true;
 	}
 
+	// append string to the queue
 	synchronized void append(String val) {
 		values.add(val);
 		if (queue) {
@@ -40,6 +41,7 @@ public class Appender implements Runnable {
 		}
 	}
 
+	// remove queue elements
 	synchronized void clear() {
 		clear = true;
 		curLength = 0;
@@ -51,6 +53,7 @@ public class Appender implements Runnable {
 		}
 	}
 
+	// add system outs to the admin console
 	public synchronized void run() {
 		if (clear) {
 			textArea.setText("");

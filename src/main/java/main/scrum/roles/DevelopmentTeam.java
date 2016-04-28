@@ -6,31 +6,16 @@ import main.Helper;
 import main.database.HibernateUtil;
 import main.gui.InputConsole;
 
+
 /**
- * The MIT License
- * 
- * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * @author Miroslav Nenov
+ * One of the three Scrum roles, inherits Scrum participant
+ * runs on a single thread concurrently with the other roles
  */
 public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 	private static Role role = Role.DEV_TEAM;
+	
+	// personal user console
 	private InputConsole console;
 	
 	// used to control the life scope of the thread
@@ -57,6 +42,7 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 		this.running = false;
 	}
 	
+	// obligation for this role
 	public static void askForClarifications() {
 		System.out.println("Development Team: Asking for Clarifications");
 
@@ -64,7 +50,8 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 		Helper.updateBlackboardEntryRecord("clarificationsAsked", "true", session);
 		session.close();
 	}
-	
+
+	// obligation for this role
 	public static void giveTaskEstimation() {
 		System.out.println("Development Team: Giving Task Estimation");
 
@@ -73,6 +60,7 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 		session.close();
 	}
 
+	// obligation for this role
 	public static void updateStatus() {
 		System.out.println("Development Team: Giving Status Changes");
 
@@ -81,6 +69,7 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 		session.close();
 	}
 	
+	// obligation for this role
 	public static void demonstrateCompletedTasks() {
 		System.out.println("Development Team: Demonstrating Completed Tasks");
 
@@ -89,6 +78,7 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 		session.close();
 	}
 	
+	// obligation for this role
 	public static void giveFeedback() {
 		System.out.println("Development Team: Giving Feedback for the Past Sprint");
 
@@ -97,6 +87,10 @@ public class DevelopmentTeam extends ScrumParticipant implements Runnable {
 		session.close();
 	}
 
+	/* (non-Javadoc)
+	 * start the thread to run 
+	 * while running at a time interval check for active associated norms
+	 */
 	@Override
 	public void run() {
 		console = new InputConsole("Development Team Terminal", new DevelopmentTeam());

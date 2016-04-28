@@ -10,12 +10,12 @@ import javax.swing.JTextArea;
  * @author Miroslav Nenov
  * code adapted from: http://stackoverflow.com/questions/342990/create-java-console-inside-a-gui-panel
  */
-
 public class TextOutputStream extends OutputStream {
 
 	private byte[] oneByte;
 	private Appender appender;
 
+	// creates instance of the appender in the provided text area
 	public TextOutputStream(JTextArea txtara) {
 		oneByte = new byte[1];
 		appender = new Appender(txtara);
@@ -36,6 +36,7 @@ public class TextOutputStream extends OutputStream {
 		}
 	}
 
+	// stream of bytes to string
 	static private String bytesToString(byte[] ba, int str, int len) {
 		try {
 			return new String(ba, str, len, "UTF-8");

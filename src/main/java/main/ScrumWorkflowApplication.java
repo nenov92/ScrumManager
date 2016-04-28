@@ -16,33 +16,25 @@ import org.camunda.bpm.engine.ProcessEngine;
 import org.hibernate.Session;
 
 /**
- * The MIT License
- * 
- * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a 
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
- * Software is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be 
- * included in all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * @author Miroslav Nenov
+ *
  */
-
 @ProcessApplication("Scrum Workflow App")
 public class ScrumWorkflowApplication extends ServletProcessApplication {
 
+	/**
+	 * @param engine Camunda engine
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * 
+	 * This method starts the engine executing the BPMN specification of the Scrum process  
+	 */
 	@PostDeploy
 	public void startProcess(ProcessEngine engine) throws IOException, InterruptedException {
+		// return the database to its original state 
 		main.Helper.refreshDatabase();
+		
+		// start an admin console
 		new Console();
 
 		System.out.println("Workflow Process Engine Started");
@@ -52,20 +44,23 @@ public class ScrumWorkflowApplication extends ServletProcessApplication {
 
 		Thread.sleep(Constants.SLEEP_TIME);
 
+		// start threads for Norm Checker, Product Owner, Scrum Master and Development Team
 		main.Helper.runThreads();
-		
+
 		Thread.sleep(Constants.SLEEP_MED);
-		
+
 		while (main.Helper.isObligationActive()) {
 			Thread.sleep(Constants.SLEEP_MED);
 		}
+		
+		// start session to the database and update the current enveronmental state
 		Session session = HibernateUtil.getSessionfactory().openSession();
 		main.Helper.updateBlackboardEntryRecord("scrumStart", "false", session);
 		main.Helper.updateBlackboardEntryRecord("checkRequirements", "true", session);
 		main.Helper.updateBlackboardEntryRecord("activeSprint", "false", session);
-
 		session.close();
-		
+
+		// start the process by name
 		engine.getRuntimeService().startProcessInstanceByKey("scrum-workflow",
 				createVariables().putValue("continue", true).putValue("implement", false));
 	}

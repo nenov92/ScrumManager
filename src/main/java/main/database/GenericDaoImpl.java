@@ -6,32 +6,19 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
+
 /**
- * The MIT License
- * 
- * Copyright 2016 Miroslav Nenov <m.nenov92 at gmail.com>
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a 
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation 
- * the rights to use, copy, modify, merge, publish, distribute, sublicense, 
- * and/or sell copies of the Software, and to permit persons to whom the 
- * Software is furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be 
- * included in all copies or substantial portions of the Software. 
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
- * PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE 
- * FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, 
- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * @author Miroslav Nenov
+ *
+ * @param <T> object of any type
  */
 public class GenericDaoImpl<T> implements GenericDaoInterface<T> {
 
+	// Hibernate session to the database
 	private Session currentSession;
 	private Class<T> entityClass;
 
+	// default empty constructor
 	public GenericDaoImpl() {
 	}
 
@@ -40,6 +27,10 @@ public class GenericDaoImpl<T> implements GenericDaoInterface<T> {
 		this.setEntityClass(entityClass);
 	}
 
+	/**
+	 * getter and setter methods
+	 */
+	
 	public Session getCurrentSession() {
 		return currentSession;
 	}
@@ -56,16 +47,28 @@ public class GenericDaoImpl<T> implements GenericDaoInterface<T> {
 		this.entityClass = entityClass;
 	}
 
+	/* (non-Javadoc)
+	 * @see main.database.GenericDaoInterface#createOrUpdate(java.lang.Object)
+	 * method to store object in the database
+	 */
 	@Override
 	public void createOrUpdate(T object) {
 		getCurrentSession().saveOrUpdate(object);
 	}
 
+	/* (non-Javadoc)
+	 * @see main.database.GenericDaoInterface#delete(java.lang.Object)
+	 * method to delete object from the database
+	 */
 	@Override
 	public void delete(T object) {
 		getCurrentSession().delete(object);
 	}
 
+	/* (non-Javadoc)
+	 * @see main.database.GenericDaoInterface#findByBlackboardEntryName(java.lang.String)
+	 * load object by its name
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public T findByBlackboardEntryName(String name) {
@@ -73,6 +76,10 @@ public class GenericDaoImpl<T> implements GenericDaoInterface<T> {
 		return (T) criteria.uniqueResult();
 	}
 
+	/* (non-Javadoc)
+	 * @see main.database.GenericDaoInterface#findByBlackboardEntryNameRegex(java.lang.String)
+	 * load object which partially fulfills the name restriction 
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findByBlackboardEntryNameRegex(String regex) {

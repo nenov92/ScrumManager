@@ -11,11 +11,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+/**
+ * @author Miroslav Nenov
+ * Admin console
+ */
 public class Console {
 	public Console() {
 		JFrame frame = new JFrame("Scrum Workflow Simulation");
 		frame.setSize(500, 600);
 
+		// menu with exit button 
 		JMenuBar menubar = new JMenuBar();
 		frame.setJMenuBar(menubar);
 
@@ -29,15 +34,18 @@ public class Console {
 
 		menubar.add(exit);
 
+		// text area to print messages
 		JTextArea textArea = new JTextArea();
 		textArea.setMargin(new Insets(10, 10, 10, 10));
 		textArea.setEditable(false);
 
+		// take system out streams
 		TextOutputStream textOutputStream = new TextOutputStream(textArea);
 		PrintStream printStream = new PrintStream(textOutputStream);
 		System.setOut(printStream);
 		System.setErr(printStream);
 
+		// Visualize
 		frame.add(new JScrollPane(textArea));
 		frame.setVisible(true);
 	}
