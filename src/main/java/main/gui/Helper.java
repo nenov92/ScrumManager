@@ -15,7 +15,7 @@ public class Helper {
 	public Helper(GUI gui) {
 		Helper.gui = gui;
 		if (frame == null) {
-			frame = new JFrame("Scrum Workflow");
+			frame = new JFrame("Scrum Workflow Status");
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.getContentPane().add(Helper.gui);
 			frame.pack();
