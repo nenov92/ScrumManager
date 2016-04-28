@@ -78,7 +78,7 @@ public class GUI extends JPanel {
 	public GUI createAndShowGui(int x, int y) throws IOException {
 		GUI mainPanel = new GUI(x, y);
 
-		JFrame frame = new JFrame("Scrum Workflow");
+		JFrame frame = new JFrame("Scrum Workflow Status");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(mainPanel);
 		frame.pack();

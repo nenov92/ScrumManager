@@ -3,6 +3,7 @@
     xmlns="http://www.camunda.org/schema/1.0/ProcessApplication"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+  <!-- configuration for the camunda engine -->
   <process-archive name="scrum-workflow">
     <process-engine>default</process-engine>
     <properties>

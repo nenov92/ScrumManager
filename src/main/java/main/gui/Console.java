@@ -17,7 +17,7 @@ import javax.swing.JTextArea;
  */
 public class Console {
 	public Console() {
-		JFrame frame = new JFrame("Scrum Workflow Simulation");
+		JFrame frame = new JFrame("Scrum Manager Admin Console");
 		frame.setSize(500, 600);
 
 		// menu with exit button 
